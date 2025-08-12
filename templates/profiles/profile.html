@@ -1,0 +1,31 @@
+{%extends "based/base.html"%}
+{%block content%}
+
+<div class="wrap">
+
+    <div class="info">
+        <img src="{{profile.ava.url}}">
+        <p>{{profile.user.username}}</p>
+        <p>{{profile.user.first_name}}</p>
+        <p>{{profile.user.last_name}}</p>
+    </div>
+
+    <div class="bio">
+        <p>{{profile.status}}</p>
+        <b>{{profile.description}}</b>
+
+    </div>
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+{%endblock%}
