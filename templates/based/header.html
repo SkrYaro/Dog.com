@@ -1,11 +1,68 @@
 
- <div class="header">
-    <a href="{%url 'login'%}">login</a>
-    <a href="{%url 'register'%}">Register</a>
+<nav class="navbar navbar-expand-lg bg-body-tertiary"  data-bs-theme="dark">
+  <div class="container-fluid" >
+    <a class="navbar-brand" href="#">Dog-Dot-Com</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Собачата</a>
+        </li>
+        <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Публікації</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="">Відео</a></li>
+                        <li><a class="dropdown-item" href="">Скетчи</a></li>
+                        <li><a class="dropdown-item" href="">Реакції</a></li>
+                    </ul>
+        <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Зв'язок</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="">Заявки</a></li>
+                        <li><a class="dropdown-item" href="">Проблеми</a></li>
+                        <li><a class="dropdown-item" href="">Форум "ЧавоЩоРобити"</a></li>
+                    </ul>
+        </li>
+        <li class="nav-item " >
+          <a class="nav-link active" href="#">Творча студія</a>
+        </li>
+          {%if request.user.is_authenticated%}
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{request.user.user.name}}
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{%url 'profile' request.user.id%}">Ваш профіль</a></li>
+            <li><a class="dropdown-item" href="{%url 'profileEdit' request.user.id%}">Змінити профіль</a></li>
+            <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">Загрузити відео</a></li>
+                <li><a class="dropdown-item" href="#">Створити скетч</a></li>
+                <li><a class="dropdown-item" href="#">Написати реакцію</a></li>
 
-    {%if request.user.is_authenticated%}
-    <a href="{%url 'logout'%}">Logout[{{request.user.username}}]</a>
-    {%else%}
-    <p>Incognito</p>
-    {%endif%}
- </div>
+              <li><hr class="dropdown-divider"></li>
+
+
+
+            {% if request.user.is_staff%}
+                <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/">Адмінська панель</a></li>
+                <li><a class="dropdown-item" href="">Адмінська провірка</a></li>
+                <li><a class="dropdown-item" href="">Адмінський форум</a></li>
+                              <li><hr class="dropdown-divider"></li>
+
+            {%endif%}
+              {%else%}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Залогінтесь для діяльності</a>
+                </li>
+              {%endif%}
+
+            <li><a class="dropdown-item" href="{%url 'logout'%}">Вийти</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+

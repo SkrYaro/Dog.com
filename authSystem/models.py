@@ -19,7 +19,7 @@ class Profile(models.Model):
     bio = models.TextField()
     isOpen = models.BooleanField(default=False)
     isApplied = models.BooleanField(default=False)
-    ava = models.ImageField(upload_to=user_img_path,default="media/ava/default.jpg")
+    ava = models.ImageField(upload_to=user_img_path,default="ava/default.jpg")
     user = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='user', on_delete=models.CASCADE)
 
     def __str__(self):
