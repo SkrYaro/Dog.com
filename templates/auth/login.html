@@ -1,9 +1,21 @@
 {%extends "based/base.html" %}
+{% load crispy_forms_tags %}
+
 {%block content %}
-<form action="{%url 'login'%}" method="POST">
-    {%csrf_token%}
-    {{form.as_p}}
-    <button type="submit">Login in account</button>
+<div class="card shadow-sm p-4 rounded">
+        <h3 class="mb-4 text-center">Логін</h3>
+        <form action="{%url 'login'%}" method="POST">
+            {%csrf_token%}
+            {{form|crispy}}
+                     <div class="action">
+                        <div class="d-grid mt-3">
+                            <button type="submit" class="btn btn-primary">Залогінитися</button>
+                        </div>
+                    </div>
+            <div class="text-center mt-3">
+        <b>Не маєте акаунт?</b><br>
+        <a href="{% url 'register' %}" class="btn btn-link">Тоді зареєструйтеся тут!</a>
+    </div>
 </form>
 
 

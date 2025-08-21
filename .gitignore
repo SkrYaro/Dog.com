@@ -4,6 +4,8 @@ __pycache__/
 *$py.class
 .idea/
 
+media*
+media/.gitkeep
 # C extensions
 *.so
 __init__.py
@@ -206,3 +208,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+
+*/migrations/
+!*/migrations/__init__.py
+.vscode/
+
