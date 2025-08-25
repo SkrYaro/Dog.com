@@ -1,7 +1,6 @@
-
 <nav class="navbar navbar-expand-lg bg-body-tertiary"  data-bs-theme="dark">
   <div class="container-fluid" >
-    <a class="navbar-brand" href="#">Dog-Dot-Com</a>
+    <a class="navbar-brand" href="{%url 'main'%}">Dog-Dot-Com</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -13,9 +12,9 @@
         <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Публікації</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="">Відео</a></li>
-                        <li><a class="dropdown-item" href="">Скетчи</a></li>
-                        <li><a class="dropdown-item" href="">Реакції</a></li>
+                        <li><a class="dropdown-item" href="{%url 'videosList'%}">Відео</a></li>
+                        <li><a class="dropdown-item" href="{%url 'reactList'%}">Реакції</a></li>
+                        <li><a class="dropdown-item" href="{%url 'sketchesList'%}">Скетчи</a></li>
                     </ul>
         <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Зв'язок</a>
@@ -37,9 +36,9 @@
             <li><a class="dropdown-item" href="{%url 'profile' request.user.id%}">Ваш профіль</a></li>
             <li><a class="dropdown-item" href="{%url 'profileEdit' request.user.id%}">Змінити профіль</a></li>
             <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Загрузити відео</a></li>
-                <li><a class="dropdown-item" href="#">Створити скетч</a></li>
-                <li><a class="dropdown-item" href="#">Написати реакцію</a></li>
+                <li><a class="dropdown-item" href="{%url 'videoCreate'%}">Загрузити відео</a></li>
+                <li><a class="dropdown-item" href="{%url 'sketchCreate'%}">Створити скетч</a></li>
+                <li><a class="dropdown-item" href="{%url 'reactCreate'%}">Написати реакцію</a></li>
 
               <li><hr class="dropdown-divider"></li>
 

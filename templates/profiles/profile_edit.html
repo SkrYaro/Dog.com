@@ -2,7 +2,7 @@
 {%block content%}
 {% load crispy_forms_tags %}
 
-<div class="card shadow-sm p-4 rounded " >
+<div style="margin:2em;" class="card shadow-sm p-4 rounded "  >
             <h3 class="mb-4 text-center">Покращення профілю</h3>
 <form method="POST" action="{%url 'profileEdit' request.user.id%}" enctype="multipart/form-data">
     {%csrf_token%}

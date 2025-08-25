@@ -1,0 +1,14 @@
+{%extends "based/base.html"%}
+{%block content%}
+
+{%for sketch in sketches %}
+    <h1>{{sketch.name}}</h1>
+<img src="{{sketch.img.url}}" alt="">
+<b>{{sketch.description}}</b>
+<p>{{sketch.reactionMaker.name}}</p>
+    <a href="{%url 'sketchEdit' sketch.id%}">Edit</a>
+    <a href="{%url 'sketchDelete' sketch.id%}">Delete</a>
+<hr>
+{%endfor%}
+
+{%endblock%}
