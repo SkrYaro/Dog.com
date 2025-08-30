@@ -4,31 +4,20 @@
 
 
     {%for post in posts%}
-    {%if post.accepted%}
-    <div class="list" style="margin:3em;">
-        <div class="row g-0 text-center">
-          <div class="col-sm-6 col-md-8">
-            <h1>{{post.name}}</h1>
-              {%if post.img%}
-            <img class="img-thumbnail" src="{{post.img.url}}" alt="Фотографія публікації">
-              {%endif%}
-            {%if post.video%}
-                <video controls>
-                <source src="{{post.video.url}}" type="video/mp4"  />
+        {%if post.accepted%}
+<hr>
+<a href=""><h1>{{post.name}}</h1></a>
+<b>{{post.description}}</b>
+{%if post.postType == "video"%}
+    <video style = "width:75%" src="{{post.video.url}}" controls></video>
+{%elif post.postType == "img"%}
+    <img style="width:50%" src="{{post.img.url}}" alt="img">
+{%elif post.postType == "react"%}
+    <p>{{post.react}}</p>
+{%endif%}
+<hr>
 
-            </video>
 
-              {%endif%}
-              <b>Creator:{{post.contentMaker}}</b>
-            <p>time_action: {{post.time_upd}}</p>
-              <p></p>
-              </div>
-            <div class="col-6 col-md-4">
-                <h3>Description:{{post.description}}</h3>
-            </div>
-            </div>
-    </div>
-    <hr>
 {%endif%}
 {%endfor%}
 

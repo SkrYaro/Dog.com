@@ -1,135 +1,105 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 from blog.forms import ReactCreateForm, SketchCreateForm, VideoCreateForm
-from blog.models import Video,Sketch,Reaction
+from blog.models import Post , Tags,Category
 from authSystem.models import Profile
 
-def reactionView(request,react_id):
-    react = get_object_or_404(Reaction, id = react_id)
-    return render(request, template_name="forms/reactPost.html", context={"react":react})
 
-def reactiosnView(request):
-    reacts = Reaction.objects.all()
-    return render(request, template_name="blog/reactList.html", context={"reacts":reacts})
-
-def reactionCreate(request):
+def postCreate(request, type):
     profile = get_object_or_404(Profile, id = request.user.id)
     if request.method == "POST":
-        form = ReactCreateForm(request.POST)
-        if form.is_valid():
-            react = form.save(commit=False)
-            react.reactionMaker = profile
-            react.save()
-            return redirect("reactList")
+        match type:
+            case "react":
+                form = ReactCreateForm(request.POST)
+
+                if form.is_valid():
+                    react = form.save(commit=False)
+                    react.author = profile
+                    react.postType = type
+                    react.save()
+                    return redirect("drafts" ,request.user.id)
+            case "video":
+                form = VideoCreateForm(request.POST, request.FILES)
+                if form.is_valid():
+                    video = form.save(commit=False)
+                    video.author = profile
+                    video.postType = type
+                    video.save()
+                    return redirect("drafts",request.user.id)
+            case "sketch":
+                form = SketchCreateForm(request.POST, request.FILES)
+                if form.is_valid():
+                    sketch = form.save(commit=False)
+                    sketch.author = profile
+                    sketch.postType = "img"
+                    sketch.save()
+                    return redirect("drafts",request.user.id)
+            case _ :
+                raise ValueError("Post type error")
 
     else:
-        form = ReactCreateForm()
-        return render(request, template_name = "forms/reactForm.html", context={"form":form,"profile":profile})
+        match type:
+            case "video":
+                form = VideoCreateForm()
+            case "sketch":
+                form = SketchCreateForm()
+            case "react":
+                form = ReactCreateForm()
+        return render(request, template_name="forms/formCreate.html", context={"form":form, "profile":profile ,"type":type})
 
-
-def reactionEdit(request, react_id):
-    react = get_object_or_404(Reaction, id=react_id)
-    if request.method == "POST":
-        form = ReactCreateForm(request.POST, instance=react)
-        if form.is_valid():
-            form.save()
-            return redirect("reactList")
-    else:
-        form = ReactCreateForm(instance=react)
-        return render(request, template_name="forms/reactEditForm.html", context={"form": form,'react':react})
-
-
-def reactionDelete(request,react_id):
-    react = get_object_or_404(Reaction, id = react_id)
-    if react.reactionMaker.user == request.user:
-        react.delete()
-        return redirect("reactList")
-    else:
-        raise PermissionDenied()
-
-
-def sketchView(request, sketch_id):
-    sketch = get_object_or_404(Sketch, id=sketch_id)
-    return render(request, template_name="forms/sketchPost.html", context={"sketch": sketch})
-
-def sketchesView(request):
-    sketches = Sketch.objects.all()
-    return render(request, template_name="blog/sketchesList.html", context={"sketches": sketches})
-
-def sketchCreate(request):
+def postEdit(request, type , post_id):
     profile = get_object_or_404(Profile, id=request.user.id)
+    post = get_object_or_404(Post, id = post_id)
     if request.method == "POST":
-        form = SketchCreateForm(request.POST, request.FILES)
-        if form.is_valid():
-            sketch = form.save(commit=False)
-            sketch.sketchMaker = profile
-            sketch.save()
-            return redirect("sketchesList")
-
+        match type:
+            case "react":
+                form = ReactCreateForm(request.POST)
+                if form.is_valid():
+                    post = form.save(commit=False)
+                    post.postType = type
+                    post.author = profile
+                    post.draft = False
+                    post.save()
+                    return redirect("main")
+            case "video":
+                form = VideoCreateForm(request.POST, request.FILES)
+                if form.is_valid():
+                    post = form.save(commit=False)
+                    post.author = profile
+                    post.postType = type
+                    post.draft = False
+                    post.save()
+                    return redirect("main")
+            case "sketch":
+                form = SketchCreateForm(request.POST, request.FILES)
+                if form.is_valid():
+                    post = form.save(commit=False)
+                    post.author = profile
+                    post.postType = type
+                    post.draft = False
+                    post.save()
+                    return redirect("main")
+            case _:
+                raise ValueError("Post type error")
     else:
-        form = SketchCreateForm()
-        return render(request, template_name="forms/sketchForm.html", context={"form": form, "profile": profile})
+        match type:
+            case "video":
+                form = VideoCreateForm(instance=post)
+            case "sketch":
+                form = SketchCreateForm(instance=post)
+            case "react":
+                form = ReactCreateForm(instance=post)
+    return render(request, template_name="forms/formEdit.html", context={"form": form, "profile": profile, "post":post,"type":type})
 
-def sketchEdit(request, sketch_id):
-    sketch = get_object_or_404(Sketch, id=sketch_id)
-    if request.method == "POST":
-        form = SketchCreateForm(request.POST, request.FILES,instance=sketch)
-        if form.is_valid():
-            form.save()
-            return redirect("sketchesList")
-    else:
-        form = SketchCreateForm(instance=sketch)
-        return render(request, template_name="forms/sketchEditForm.html", context={"form": form, 'sketch': sketch})
 
-def sketchDelete(request, sketch_id):
-    sketch = get_object_or_404(Sketch, id=sketch_id)
-    if sketch.sketchMaker.user == request.user:
-        sketch.delete()
-        return redirect("sketchesList")
+def postDelete(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if post.author.user == request.user:
+        post.delete()
+        return redirect("drafts" ,request.user.id)
     else:
         raise PermissionDenied()
 
-
-
-def videoView(request, video_id):
-    video = get_object_or_404(Video, id=video_id)
-    return render(request, template_name="forms/videoPost.html", context={"video": video})
-
-def videosView(request):
-    videos = Video.objects.all()
-    return render(request, template_name="blog/videosList.html", context={"videos": videos})
-
-def videoCreate(request):
-    profile = get_object_or_404(Profile, id=request.user.id)
-    if request.method == "POST":
-        form = VideoCreateForm(request.POST, request.FILES)
-        if form.is_valid():
-            video = form.save(commit=False)
-            video.videoMaker = profile
-            video.save()
-            return redirect("videosList")
-
-    else:
-        form = VideoCreateForm()
-        return render(request, template_name="forms/videoForm.html", context={"form": form, "profile": profile})
-
-def videoEdit(request, video_id):
-    video = get_object_or_404(Video, id=video_id)
-    if request.method == "POST":
-        form = VideoCreateForm(request.POST, request.FILES,instance=video)
-        if form.is_valid():
-            form.save()
-            return redirect("videosList")
-    else:
-        form = VideoCreateForm(instance=video)
-        return render(request, template_name="forms/videoEditForm.html", context={"form": form, 'video': video})
-
-def videoDelete(request, video_id):
-    video = get_object_or_404(Video, id=video_id)
-    if video.videoMaker.user == request.user:
-        video.delete()
-        return redirect("videosList")
-    else:
-        raise PermissionDenied()

@@ -1,0 +1,7 @@
+{%extends "based/base.html"%}
+{%block content%}
+    <h>{{post.name}}</h>
+
+
+<form action="{%url 'commentAdd' post.type post.id%}">{{form.as_p}}</form>
+{%endblock%}

@@ -1,22 +1,41 @@
 from django import forms
 
-from blog.models import Reaction, Sketch, Video
+from blog.models import Post, Category, Tags
 
 
 class ReactCreateForm(forms.ModelForm):
+    name = forms.CharField(label="Придумайте назву реакції", max_length=100)
+    description = forms.CharField(label="Придумайте опис до реакції", max_length=100)
+    category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tags.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
+
     class Meta:
-        model = Reaction
-        fields = ["name", "description"]
+        model = Post
+        fields = ["name", "description", "category" , "tags", "draft"]
 
 
 class SketchCreateForm(forms.ModelForm):
+    name = forms.CharField(label="Придумайте назву відео", max_length=100)
+    description = forms.CharField(label="Придумайте опис до відео", max_length=100)
+    img = forms.FileField(label="Загрузіть ваший витвір мистецтва")
+    category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tags.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
+    draft = forms.BooleanField(label="Дороблена версія?")
     class Meta:
-        model = Sketch
-        fields = ["name", "description", "img"]
+        model = Post
+        fields = ["name", "description", "img", "category", "tags", "draft"]
 
 
 class VideoCreateForm(forms.ModelForm):
+    name = forms.CharField(label="Придумайте назву відео",max_length=100 )
+
+    description = forms.CharField(label="Придумайте опис до відео", max_length=100)
+    video = forms.FileField(label="Загрузіть відео")
+    category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tags.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
+
     class Meta:
-        model = Video
-        fields = ["name", "description", "video"]
+        model = Post
+        fields = ["name", "description", "video", "category", "tags" , "draft"]
+
 

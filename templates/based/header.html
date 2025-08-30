@@ -7,14 +7,14 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Собачата</a>
+          <a class="nav-link active" aria-current="page" href="#">СабДоги</a>
         </li>
         <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Публікації</a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{%url 'videosList'%}">Відео</a></li>
-                        <li><a class="dropdown-item" href="{%url 'reactList'%}">Реакції</a></li>
-                        <li><a class="dropdown-item" href="{%url 'sketchesList'%}">Скетчи</a></li>
+                        <li><a class="dropdown-item" href="">Відео</a></li>
+                        <li><a class="dropdown-item" href="">Реакції</a></li>
+                        <li><a class="dropdown-item" href="">Скетчи</a></li>
                     </ul>
         <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Зв'язок</a>
@@ -25,7 +25,7 @@
                     </ul>
         </li>
         <li class="nav-item " >
-          <a class="nav-link active" href="#">Творча студія</a>
+          <a class="nav-link active" href="{%url 'drafts' request.user.id%}">Творча студія</a>
         </li>
           {%if request.user.is_authenticated%}
           <li class="nav-item dropdown">
@@ -36,17 +36,17 @@
             <li><a class="dropdown-item" href="{%url 'profile' request.user.id%}">Ваш профіль</a></li>
             <li><a class="dropdown-item" href="{%url 'profileEdit' request.user.id%}">Змінити профіль</a></li>
             <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{%url 'videoCreate'%}">Загрузити відео</a></li>
-                <li><a class="dropdown-item" href="{%url 'sketchCreate'%}">Створити скетч</a></li>
-                <li><a class="dropdown-item" href="{%url 'reactCreate'%}">Написати реакцію</a></li>
+                <li><a class="dropdown-item" href="{%url 'create' 'video' %}">Загрузити відео</a></li>
+                <li><a class="dropdown-item" href="{%url 'create' 'sketch' %}">Створити скетч</a></li>
+                <li><a class="dropdown-item" href="{%url 'create' 'react' %}">Написати реакцію</a></li>
 
               <li><hr class="dropdown-divider"></li>
 
 
 
             {% if request.user.is_staff%}
-                <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin/">Адмінська панель</a></li>
-                <li><a class="dropdown-item" href="">Адмінська провірка</a></li>
+                <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin">Адмінська панель</a></li>
+                <li><a class="dropdown-item" href="{%url 'moderatorList'%}">Адмінська провірка</a></li>
                 <li><a class="dropdown-item" href="">Адмінський форум</a></li>
                               <li><hr class="dropdown-divider"></li>
 

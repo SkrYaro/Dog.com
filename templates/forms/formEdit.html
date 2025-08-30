@@ -1,0 +1,25 @@
+{%extends "based/base.html"%}
+
+{% load crispy_forms_tags %}
+
+{%block content%}
+<h1>Оновлення посту</h1>
+<b>Увага!Якщо ви підтвердите зміни ,ваш пост знов потрапить у список адмінської провірки , будь впевнений у своїх діях і не втрачай потеційні перегляди!</b>
+<form action="{%url 'edit' type post.id %}" enctype="multipart/form-data" method="POST">
+  {%csrf_token%}
+  {%if type == "video"%}
+      <h1>Форма поста:Відео</h1>
+  {%elif type == "sketch"%}
+            <h1>Форма поста:Скетч</h1>
+
+  {%elif type == "react"%}
+            <h1>Форма поста:Реакція</h1>
+  {%endif%}
+  {{form|crispy}}
+<!--  <a href="">Хочете створити свій тег , так подайте сюди заявку на тег! Протягом дня її приймуть !</a>-->
+<!--  <hr>-->
+
+  <button type="submit">Створити пост</button>
+</form>
+
+{%endblock%}

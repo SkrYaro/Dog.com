@@ -1,0 +1,39 @@
+{%extends "based/base.html"%}
+{%block content%}
+
+{%for post in posts%}
+    {%if not post.accepted and not post.draft%}
+        <div class="list" style="margin:3em;">
+        <div class="row g-0 text-center">
+          <div class="col-sm-6 col-md-8">
+            <h1>{{post.name}}</h1>
+              {%if post.postType == "img"%}
+
+              <img src="{{post.img.url}}" alt="">
+            {%elif post.postType == "video"%}
+                <video controls>
+                <source src="{{post.video.url}}" type="video/mp4"  />
+            </video>
+              {%elif post.postType == "react"%}
+              <p>{{post.react}}</p>
+
+              {%endif%}
+              <b>Creator:{{post.contentMaker}}</b>
+            <p>time_action: {{post.time_upd}}</p>
+              <p></p>
+              </div>
+            <div class="col-6 col-md-4">
+                <h3>Description:{{post.description}}</h3>
+            </div>
+            </div>
+    </div>
+    <hr>
+
+<a href="{% url 'moderDelete' post.id %}">Delete</a>
+<a href="{% url 'moderAccept' post.id %}">Accept</a>
+
+
+    {%endif%}
+{%endfor%}
+
+{%endblock%}
