@@ -39,10 +39,18 @@ class Post(models.Model):
     time_upd = models.DateTimeField(auto_now=True)
 
     category = models.ForeignKey(Category,related_name="themes",on_delete=models.CASCADE, null=True,blank=True)
-    tags = models.ManyToManyField(Tags, related_name="tags", null=True,blank=True)
+    tags = models.ManyToManyField(Tags, related_name="tags",blank=True)
 
+class Comment(models.Model):
+    text = models.TextField()
+    author = models.ForeignKey(Profile, related_name="comment", on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name="post", on_delete=models.CASCADE)
+    answerOnYourself = models.ForeignKey("self",related_name="answer", on_delete=models.CASCADE, null=True,blank=True)
 
+    time_add = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.text} ---> {self.author.user}"
 
 
 

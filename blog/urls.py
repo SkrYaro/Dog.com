@@ -15,5 +15,11 @@ urlpatterns = [
     path("moderator/accept/post:<int:post_id>" , views.adminAccept ,name = "moderAccept"),
     path("moderator/delete/post:<int:post_id>" , views.adminDelete ,name = "moderDelete"),
 
-    path("user/id:<int:user_id>", views.draftList , name = "drafts")
+    path("user/id:<int:user_id>", views.draftList , name = "drafts"),
+
+    path("post/view/id=<int:post_id>" , views.postView , name = "post"),
+
+    path("post/comment/add/post_id:<int:post_id>",crud.comentAdd, name = 'commentAdd'),
+
+    path("post/comment/add/post_id:<int:post_id>/comment<int:comment_id>",crud.answerAdd, name = 'answerCommentAdd'),
 ]

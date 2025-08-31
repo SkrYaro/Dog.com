@@ -1,6 +1,6 @@
 from django import forms
 
-from blog.models import Post, Category, Tags
+from blog.models import Post, Category, Tags, Comment
 
 
 class ReactCreateForm(forms.ModelForm):
@@ -39,3 +39,7 @@ class VideoCreateForm(forms.ModelForm):
         fields = ["name", "description", "video", "category", "tags" , "draft"]
 
 
+class ComentCreateForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ["text"]

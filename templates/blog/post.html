@@ -1,7 +1,39 @@
 {%extends "based/base.html"%}
+{%load crispy_forms_tags%}
 {%block content%}
+
+
+
     <h>{{post.name}}</h>
+<hr>
 
+    {%for comment in comments%}
+<p class="d-inline-flex gap-1">
+  <a class="btn btn-primary" data-bs-toggle="collapse" href="#{{comment.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+    {{comment.text}}
+  </a>
+</p>
+<form action="{%url 'answerCommentAdd' post.id comment.id%}">{{form|crispy}} <button type="submit">accept</button></form>
 
-<form action="{%url 'commentAdd' post.type post.id%}">{{form.as_p}}</form>
+{%for answer in comment.answer.all%}
+<div class="collapse" id="{{comment.id}}">
+  <div class="card card-body">
+    {{answer.text}}
+  </div>
+</div>
+{%empty%}
+<div class="collapse" id="{{comment.id}}">
+  <div class="card card-body">
+    поки відповідей немає
+  </div>
+</div>
+{%endfor%}
+<br>
+{%endfor%}
+
+<form action="{%url 'commentAdd' post.id%}" method="POST">
+  {%csrf_token%}
+  {{form|crispy}}
+<button type="submit">Надіслати комент</button>
+</form>
 {%endblock%}

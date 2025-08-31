@@ -4,7 +4,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import Resolver404
 
 from authSystem.models import Profile
-from blog.models import Post
+from blog.forms import ComentCreateForm
+from blog.models import Post, Comment
 
 
 # Create your views here.
@@ -50,3 +51,8 @@ def adminDelete(request,post_id):
     else:
         raise PermissionDenied()
 
+def postView(request, post_id):
+    post = get_object_or_404(Post,id = post_id)
+    comments = Comment.objects.filter( post = post, answerOnYourself= None)
+    form = ComentCreateForm()
+    return render(request, template_name="blog/post.html",context={"post":post,"form":form,"comments":comments})

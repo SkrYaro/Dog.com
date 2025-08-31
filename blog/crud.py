@@ -3,8 +3,8 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
-from blog.forms import ReactCreateForm, SketchCreateForm, VideoCreateForm
-from blog.models import Post , Tags,Category
+from blog.forms import ReactCreateForm, SketchCreateForm, VideoCreateForm, ComentCreateForm
+from blog.models import Post, Tags, Category, Comment
 from authSystem.models import Profile
 
 
@@ -56,7 +56,7 @@ def postEdit(request, type , post_id):
     if request.method == "POST":
         match type:
             case "react":
-                form = ReactCreateForm(request.POST)
+                form = ReactCreateForm(request.POST,instance=post)
                 if form.is_valid():
                     post = form.save(commit=False)
                     post.postType = type
@@ -65,7 +65,7 @@ def postEdit(request, type , post_id):
                     post.save()
                     return redirect("main")
             case "video":
-                form = VideoCreateForm(request.POST, request.FILES)
+                form = VideoCreateForm(request.POST, request.FILES,instance=post)
                 if form.is_valid():
                     post = form.save(commit=False)
                     post.author = profile
@@ -74,7 +74,7 @@ def postEdit(request, type , post_id):
                     post.save()
                     return redirect("main")
             case "sketch":
-                form = SketchCreateForm(request.POST, request.FILES)
+                form = SketchCreateForm(request.POST, request.FILES,instance=post)
                 if form.is_valid():
                     post = form.save(commit=False)
                     post.author = profile
@@ -103,3 +103,33 @@ def postDelete(request, post_id):
     else:
         raise PermissionDenied()
 
+
+def comentAdd(request,post_id):
+    profile = get_object_or_404(Profile, id = request.user.id)
+    post = get_object_or_404(Post,id = post_id)
+    if request.method == "POST":
+        form = ComentCreateForm(request.POST)
+        if form.is_valid():
+            coment = form.save(commit = False)
+            coment.author = profile
+            coment.post = post
+            coment.save()
+            return redirect("post", post.id)
+    else:
+        form = ComentCreateForm()
+    return render(request,"blog/post.html", context={"form":form, "post":post})
+
+def answerAdd(request, post_id,comment_id):
+    profile = get_object_or_404(Profile, id = request.user.id)
+    post = get_object_or_404(Post, id=post_id)
+    comment = get_object_or_404(Comment, id = comment_id)
+    if request.method == "POST":
+        form = ComentCreateForm(request.POST)
+        if form.is_valid():
+            coment = form.save(commit=False)
+            coment.author = profile
+            coment.post = post
+            coment.answerOnYourself = comment
+            coment.save()
+            print(coment)
+            return redirect("post", post.id)
