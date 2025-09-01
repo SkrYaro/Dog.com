@@ -73,7 +73,7 @@ def postEdit(request, type , post_id):
                     post.draft = False
                     post.save()
                     return redirect("main")
-            case "sketch":
+            case "img":
                 form = SketchCreateForm(request.POST, request.FILES,instance=post)
                 if form.is_valid():
                     post = form.save(commit=False)
@@ -88,11 +88,14 @@ def postEdit(request, type , post_id):
         match type:
             case "video":
                 form = VideoCreateForm(instance=post)
-            case "sketch":
+            case "img":
                 form = SketchCreateForm(instance=post)
             case "react":
                 form = ReactCreateForm(instance=post)
-    return render(request, template_name="forms/formEdit.html", context={"form": form, "profile": profile, "post":post,"type":type})
+            case _:
+                raise ValueError("Post type error")
+
+    return render(request, template_name="forms/formEdit.html", context={"form":form, "profile": profile, "post":post,"type":type})
 
 
 def postDelete(request, post_id):
@@ -131,5 +134,7 @@ def answerAdd(request, post_id,comment_id):
             coment.post = post
             coment.answerOnYourself = comment
             coment.save()
-            print(coment)
             return redirect("post", post.id)
+    else:
+        form = ComentCreateForm()
+    return render(request, "blog/post.html", context={"form": form, "post": post, "comment":comment})

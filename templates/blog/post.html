@@ -4,21 +4,41 @@
 
 
 
-    <h>{{post.name}}</h>
+    <h1>{{post.name}}</h1>
+    <h2>{{post.author}}</h2>
+{%if post.postType == "video"%}
+  <video style="width:75%" src="{{post.video.url}}" controls>
+    <source>
+  </video>
+{%elif post.postType == "sketch"%}
+<img src="{{post.img.url}}" alt="">
+{%else%}
+  <p>{{post.react}}</p>
+{%endif%}
+<hr>
+  <form action="{%url 'commentAdd' post.id%}" method="POST">
+  {%csrf_token%}
+  {{form|crispy}}
+<button type="submit">Надіслати комент</button>
+</form>
+
 <hr>
 
     {%for comment in comments%}
-<p class="d-inline-flex gap-1">
-  <a class="btn btn-primary" data-bs-toggle="collapse" href="#{{comment.id}}" role="button" aria-expanded="false" aria-controls="collapseExample">
+    <h1>{{comment.author}}</h1>
+  <a data-bs-toggle="collapse" href="#{{comment.id}}" role="link" aria-expanded="false" aria-controls="collapseExample">
     {{comment.text}}
   </a>
-</p>
-<form action="{%url 'answerCommentAdd' post.id comment.id%}">{{form|crispy}} <button type="submit">accept</button></form>
 
+<div class="collapse" id="{{comment.id}}">
+  <div class="card card-body">
+<form action="{%url 'answerCommentAdd' post.id comment.id%}" method="POST">{%csrf_token%}{{form|crispy}} <button type="submit">accept</button></form>
+  </div>
+</div>
 {%for answer in comment.answer.all%}
 <div class="collapse" id="{{comment.id}}">
   <div class="card card-body">
-    {{answer.text}}
+    <b>{{answer.author}}:</b> {{answer.text}}
   </div>
 </div>
 {%empty%}
@@ -31,9 +51,5 @@
 <br>
 {%endfor%}
 
-<form action="{%url 'commentAdd' post.id%}" method="POST">
-  {%csrf_token%}
-  {{form|crispy}}
-<button type="submit">Надіслати комент</button>
-</form>
+
 {%endblock%}

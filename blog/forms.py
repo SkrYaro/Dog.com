@@ -4,14 +4,16 @@ from blog.models import Post, Category, Tags, Comment
 
 
 class ReactCreateForm(forms.ModelForm):
+
     name = forms.CharField(label="Придумайте назву реакції", max_length=100)
     description = forms.CharField(label="Придумайте опис до реакції", max_length=100)
     category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
     tags = forms.ModelMultipleChoiceField(queryset=Tags.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
+    draft = forms.BooleanField(label="Дороблена версія?", required=False)
 
     class Meta:
         model = Post
-        fields = ["name", "description", "category" , "tags", "draft"]
+        fields = ["name", "description","react", "category" , "tags", "draft"]
 
 
 class SketchCreateForm(forms.ModelForm):
@@ -20,7 +22,7 @@ class SketchCreateForm(forms.ModelForm):
     img = forms.FileField(label="Загрузіть ваший витвір мистецтва")
     category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
     tags = forms.ModelMultipleChoiceField(queryset=Tags.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
-    draft = forms.BooleanField(label="Дороблена версія?")
+    draft = forms.BooleanField(label="Дороблена версія?", required=False)
     class Meta:
         model = Post
         fields = ["name", "description", "img", "category", "tags", "draft"]
@@ -33,6 +35,7 @@ class VideoCreateForm(forms.ModelForm):
     video = forms.FileField(label="Загрузіть відео")
     category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
     tags = forms.ModelMultipleChoiceField(queryset=Tags.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
+    draft = forms.BooleanField(label="Дороблена версія?", required=False)
 
     class Meta:
         model = Post

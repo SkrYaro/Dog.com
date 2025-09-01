@@ -9,7 +9,7 @@
 <a href="{%url 'post' post.id %}"><h1>{{post.name}}</h1></a>
 <b>{{post.description}}</b>
 {%if post.postType == "video"%}
-    <video style = "width:75%" src="{{post.video.url}}" controls></video>
+<a href="{%url 'post' post.id %}"><video style = "width:75%" src="{{post.video.url}}" controls></video></a>
 {%elif post.postType == "img"%}
     <img style="width:50%" src="{{post.img.url}}" alt="img">
 {%elif post.postType == "react"%}
