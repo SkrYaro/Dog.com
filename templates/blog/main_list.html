@@ -1,22 +1,60 @@
 {%extends "based/base.html"%}
 {%block content%}
 
+<form method="GET">
+  <input type="text" name="name" placeholder="Пошук за назвою">
 
+    <div class="input-group mb-3">
+    <label class="input-group-text" for="inputGroupSelect01">Категорія</label>
+    <select class="form-select" id="inputGroupSelect01" name="category">
+      <option value="">Всі категорії</option>
+      {% for category in categories %}
+        <option value="{{ category.id }}">{{ category.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
 
-    {%for post in posts%}
-        {%if post.accepted%}
-<hr>
-<a href="{%url 'post' post.id %}"><h1>{{post.name}}</h1></a>
-<b>{{post.description}}</b>
-{%if post.postType == "video"%}
-<a href="{%url 'post' post.id %}"><video style = "width:75%" src="{{post.video.url}}" controls></video></a>
-{%elif post.postType == "img"%}
-    <img style="width:50%" src="{{post.img.url}}" alt="img">
-{%elif post.postType == "react"%}
-    <p>{{post.react}}</p>
-{%endif%}
-<hr>
+    <div>
+  <label>Теги:</label><br>
+  {% for tag in tags %}
+    <label>
+      <input type="checkbox" name="tags" value="{{ tag.id }}"
+             {% if tag.id|stringformat:"s" in selected_tags %}checked{% endif %}>
+      {{ tag.name }}
+    </label><br>
+  {% endfor %}
+</div>
 
+  <button type="submit">Пошук</button>
+</form>
+
+        {%for post in posts%}
+            {%if post.accepted%}
+    <hr>
+<div>
+    <a href="{%url 'post' post.id %}"><h1>{{post.name}}</h1></a>
+    {%if post.postType == "video"%}
+    <a href="{%url 'post' post.id %}"><video style = "width:75%" src="{{post.video.url}}" controls></video></a>
+    {%elif post.postType == "img"%}
+    <a href="{%url 'post' post.id %}"><img style="width:50%" src="{{post.img.url}}" alt="img"></a>
+    {%elif post.postType == "react"%}
+        <p>{{post.react}}</p>
+        {%endif%}
+    <b>{{post.description}}</b>
+    {%if post.category%}
+    <p>Категорія:{{post.category}}</p>
+    {%else%}
+    <b>Категорії , немає</b>
+    {%endif%}
+    <br>
+    <b>Теги:</b>
+    {%for tag in post.tags.all%}
+        <b>{{tag.name}} , </b>
+    {%empty%}
+        <b>Немає тегів</b>
+    {%endfor%}
+    <hr>
+</div>
 
 {%endif%}
 {%endfor%}

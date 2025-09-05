@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import CustomCreateForm, CreateProfileForm
 from .models import Profile
 
+from blog.models import Sub
 # Create your views here.
 
 def registration_view(request):
@@ -57,8 +58,19 @@ class Profiles:
 
     def profile_view(request, user_id):
         profile = get_object_or_404(Profile,id = user_id)
+        intoSub = len(list(Sub.objects.filter(fan = profile)))
+        outoSub = len(list(Sub.objects.filter(author = profile)))
 
-        return render(request,template_name='profiles/profile.html', context={'profile':profile})
+
+
+        try:
+            fan = get_object_or_404(Profile,id = request.user.id)
+            subs = get_object_or_404(Sub , fan=fan,author = profile )
+            sub = True
+        except:
+            sub = False
+
+        return render(request,template_name='profiles/profile.html', context={'profile':profile, "sub":sub,"intoSub":intoSub,"outoSub":outoSub})
 
     @staticmethod
     @login_required

@@ -3,19 +3,35 @@
 {%block content%}
 
 
-
-    <h1>{{post.name}}</h1>
-    <h2>{{post.author}}</h2>
+  <div class="row">
+    <div class="col">
+       <h1>{{post.name}}</h1>
 {%if post.postType == "video"%}
-  <video style="width:75%" src="{{post.video.url}}" controls>
+  <video style="width:100%" src="{{post.video.url}}" controls>
     <source>
   </video>
-{%elif post.postType == "sketch"%}
+{%elif post.postType == "img"%}
 <img src="{{post.img.url}}" alt="">
 {%else%}
   <p>{{post.react}}</p>
 {%endif%}
-<hr>
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        Опис
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+          <a href="{%url 'profile' post.author.id%}">{{post.author}}</a><br>
+          <div class="card">
+            <div class="card-body">{{post.description}}</div>
+              </div>
+      </div>
+    </div>
+  </div>
+
   <form action="{%url 'commentAdd' post.id%}" method="POST">
   {%csrf_token%}
   {{form|crispy}}
@@ -25,14 +41,19 @@
 <hr>
 
     {%for comment in comments%}
-    <h1>{{comment.author}}</h1>
+    <div class="card">
+            <div class="card-body"><h1>{{comment.author}}</h1>
   <a data-bs-toggle="collapse" href="#{{comment.id}}" role="link" aria-expanded="false" aria-controls="collapseExample">
     {{comment.text}}
   </a>
 
+            </div></div>
+      <div class="col-auto">
+
+      </div>
 <div class="collapse" id="{{comment.id}}">
   <div class="card card-body">
-<form action="{%url 'answerCommentAdd' post.id comment.id%}" method="POST">{%csrf_token%}{{form|crispy}} <button type="submit">accept</button></form>
+<form style="width:25%;" action="{%url 'answerCommentAdd' post.id comment.id%}" method="POST">{%csrf_token%}{{form|crispy}} <button type="submit">accept</button></form>
   </div>
 </div>
 {%for answer in comment.answer.all%}
@@ -50,6 +71,17 @@
 {%endfor%}
 <br>
 {%endfor%}
+    </div>
+    <div class="col-md-auto">
+
+    </div>
+    <div class="col col-lg-3">
+
+    </div>
+  </div>
+</div>
+
+
 
 
 {%endblock%}

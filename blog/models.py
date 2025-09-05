@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from authSystem.models import Profile
 # Create your models here.
@@ -16,7 +17,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-class Tags(models.Model):
+class Tag(models.Model):
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -39,7 +40,7 @@ class Post(models.Model):
     time_upd = models.DateTimeField(auto_now=True)
 
     category = models.ForeignKey(Category,related_name="themes",on_delete=models.CASCADE, null=True,blank=True)
-    tags = models.ManyToManyField(Tags, related_name="tags",blank=True)
+    tags = models.ManyToManyField(Tag, related_name="tags",blank=True)
 
 class Comment(models.Model):
     text = models.TextField()
@@ -54,5 +55,17 @@ class Comment(models.Model):
 
 
 
+class Sub(models.Model):
+    author = models.ForeignKey(Profile, related_name="maker", on_delete=models.CASCADE)
+    fan = models.ForeignKey(Profile, related_name="fan" , on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("author","fan")
+    def __str__(self):
+        return f"{self.fan} ---> {self.author}"
+
+    def clean(self):
+        if self.author == self.fan:
+            raise ValidationError("Ви не можете підписати на самого себе")
 
 

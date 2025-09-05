@@ -6,11 +6,16 @@
   <h2>{{post.name}}</h2>
 <b>{{post.description}}</b>
 {%if post.draft%}
-<b>поки не відкритому доступі</b>
+<br>
+<b>[поки не відкритому доступі]</b>
 {%endif%}
+<br>
 
 <a href="{%url 'delete' post.id%}">Delete</a>
-<a href="{%url 'edit' post.postType post.id%}">Edit</a>
+<a href="{%url 'edit' post.postType post.id request.user.id%}">Edit</a>
+{%if post.draft%}
+  <a href="{%url 'draftConfirm' post.id%}">Confirm the post</a>
+{%endif%}
 {%endfor%}
 
 {%endblock%}

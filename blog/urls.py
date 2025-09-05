@@ -4,9 +4,10 @@ from blog import views,crud
 
 urlpatterns = [
     path('',views.posts_list, name = 'main'),
+    path('<str:post_type>',views.posts_list,name = "types_posts"),
     path("adminList/",views.adminList,name="moderatorList"),
 
-    path('edit/post/<str:type>:id=<int:post_id>', crud.postEdit, name = "edit"),
+    path('edit/post/<str:type>:id=<int:post_id>/user:<int:user_id>', crud.postEdit, name = "edit"),
 
     path('create/post/<str:type>', crud.postCreate ,name = "create"),
 
@@ -22,4 +23,14 @@ urlpatterns = [
     path("post/comment/add/post_id:<int:post_id>",crud.comentAdd, name = 'commentAdd'),
 
     path("post/comment/add/post_id:<int:post_id>/comment<int:comment_id>",crud.answerAdd, name = 'answerCommentAdd'),
+
+    path("post/draft/accept/post:<int:post_id>", crud.postDraftConfirm , name = "draftConfirm"),
+
+    path("profile/subscribe/user:<int:user_id>",crud.subscribe,name = "sub"),
+
+    path("profile/unsubscribe/user:<int:user_id>",crud.desubscribe, name = 'desub'),
+
+    path("post/subs/" ,views.postSubs, name = "subsPost"),
+
+    path("profiles/",views.profilesList,name="profiles"),
 ]

@@ -1,0 +1,27 @@
+{%extends "based/base.html"%}
+{%block content%}
+
+
+
+        {%for post in posts%}
+            {%if post.accepted%}
+    <hr>
+<div>
+    <a href="{%url 'post' post.id %}"><h1>{{post.name}}</h1></a>
+    <b>{{post.description}}</b>
+    {%if post.postType == "video"%}
+    <a href="{%url 'post' post.id %}"><video style = "width:75%" src="{{post.video.url}}" controls></video></a>
+    {%elif post.postType == "img"%}
+    <a href="{%url 'post' post.id %}"><img style="width:50%" src="{{post.img.url}}" alt="img"></a>
+    {%elif post.postType == "react"%}
+        <p>{{post.react}}</p>
+    {%endif%}
+    <hr>
+</div>
+
+{%endif%}
+{%empty%}
+<b>Поки немає постів , від ваших кумирів . Можливо треба підписатися на інших , хто робить контент?</b>
+{%endfor%}
+
+{%endblock%}

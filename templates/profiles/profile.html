@@ -13,16 +13,36 @@
 
     <div class="info">
             <img style = "width:20%"class="rounded" src="{{profile.ava.url}}">
-        <p>{{profile.user.username}}</p>
-        <p>{{profile.user.first_name}}</p>
-        <p>{{profile.user.last_name}}</p>
-    </div>
+        {%if profile.user != request.user%}
+           {%if sub%}
+            <a href="{%url 'desub' profile.user.id%}">Відписатися</a>
+            {%elif not sub%}
+            <a href="{%url 'sub' profile.user.id%}">Підписатися</a>
+            {%endif%}{%endif%}
 
-    <div class="bio">
-        <p>{{profile.status}}</p>
+        <b>Підпсиски:{{intoSub}}</b>
+        <b>Фоловери:{{outoSub}}</b>
+
+
+        <p>Юзернейм:{{profile.name}}</p>
+        {%if profile.isOpen%}
+            <p>Ім'я:{{profile.first_name}}</p>
+            <p>Призвіще:{{profile.last_name}}</p>
+            <b>Електронна адреса: {{profile.email}}</b>
+
+        {%endif%}
+        <br>
         <b>{{profile.bio}}</b>
 
+
+    {%for post in profile.posts.all%}
+    <div>
+        <a href="{%url 'post' post.id%}">{{post.name}}</a><b>--->Було оновлено {{post.time_upd}}</b>
     </div>
+        {%empty%}
+        <b>Постів поки немає</b>
+    {%endfor%}
+
 </div>
 
 

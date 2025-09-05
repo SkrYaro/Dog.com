@@ -1,0 +1,9 @@
+{%extends "based/base.html"%}
+{%block content%}
+  {%for profile in profiles%}
+    <img src="{{profile.ava.url}}" alt="">
+    <a href="{%url 'profile' profile.id%}">{{profile}}</a>
+<hr>
+  {%endfor%}
+
+{% endblock %}

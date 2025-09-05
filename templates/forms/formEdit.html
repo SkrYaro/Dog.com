@@ -5,7 +5,7 @@
 {%block content%}
 <h1>Оновлення посту</h1>
 <b>Увага!Якщо ви підтвердите зміни ,ваш пост знов потрапить у список адмінської провірки , будь впевнений у своїх діях і не втрачай потеційні перегляди!</b>
-<form action="{%url 'edit' type post.id %}" enctype="multipart/form-data" method="POST">
+<form action="{%url 'edit' type post.id request.user.id %}" enctype="multipart/form-data" method="POST">
   {%csrf_token%}
   {%if type == "video"%}
       <h1>Форма поста:Відео</h1>
