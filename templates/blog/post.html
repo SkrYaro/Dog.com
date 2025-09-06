@@ -1,87 +1,98 @@
-{%extends "based/base.html"%}
-{%load crispy_forms_tags%}
-{%block content%}
+{% extends "based/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
 
-
+<div class="container my-4">
   <div class="row">
-    <div class="col">
-       <h1>{{post.name}}</h1>
-{%if post.postType == "video"%}
-  <video style="width:100%" src="{{post.video.url}}" controls>
-    <source>
-  </video>
-{%elif post.postType == "img"%}
-<img src="{{post.img.url}}" alt="">
-{%else%}
-  <p>{{post.react}}</p>
-{%endif%}
-<div class="accordion" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header">
-      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-        Опис
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-          <a href="{%url 'profile' post.author.id%}">{{post.author}}</a><br>
-          <div class="card">
-            <div class="card-body">{{post.description}}</div>
+    <div class="col-lg-9">
+
+      <!-- Назва поста -->
+      <h1 class="mb-4">{{ post.name }}</h1>
+
+      <!-- Контент поста -->
+      <div class="mb-4 text-center">
+        {% if post.postType == "video" %}
+          <video class="img-fluid rounded" src="{{ post.video.url }}" controls></video>
+        {% elif post.postType == "img" %}
+          <img class="img-fluid rounded" src="{{ post.img.url }}" alt="image">
+        {% else %}
+          <p class="fst-italic">{{ post.react }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Accordion опис -->
+      <div class="accordion mb-4" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Опис
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+               data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <p class="mb-2">
+                Автор: <a href="{% url 'profile' post.author.id %}">{{ post.author }}</a>
+              </p>
+              <div class="card">
+                <div class="card-body">{{ post.description }}</div>
               </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <form action="{%url 'commentAdd' post.id%}" method="POST">
-  {%csrf_token%}
-  {{form|crispy}}
-<button type="submit">Надіслати комент</button>
-</form>
-
-<hr>
-
-    {%for comment in comments%}
-    <div class="card">
-            <div class="card-body"><h1>{{comment.author}}</h1>
-  <a data-bs-toggle="collapse" href="#{{comment.id}}" role="link" aria-expanded="false" aria-controls="collapseExample">
-    {{comment.text}}
-  </a>
-
-            </div></div>
-      <div class="col-auto">
-
+      <!-- Форма додавання коментаря -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <form action="{% url 'commentAdd' post.id %}" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary mt-2">💬 Надіслати коментар</button>
+          </form>
+        </div>
       </div>
-<div class="collapse" id="{{comment.id}}">
-  <div class="card card-body">
-<form style="width:25%;" action="{%url 'answerCommentAdd' post.id comment.id%}" method="POST">{%csrf_token%}{{form|crispy}} <button type="submit">accept</button></form>
-  </div>
-</div>
-{%for answer in comment.answer.all%}
-<div class="collapse" id="{{comment.id}}">
-  <div class="card card-body">
-    <b>{{answer.author}}:</b> {{answer.text}}
-  </div>
-</div>
-{%empty%}
-<div class="collapse" id="{{comment.id}}">
-  <div class="card card-body">
-    поки відповідей немає
-  </div>
-</div>
-{%endfor%}
-<br>
-{%endfor%}
+
+      <!-- Список коментарів -->
+      <h4 class="mb-3">Коментарі:</h4>
+      {% for comment in comments %}
+        <div class="card mb-3 shadow-sm">
+          <div class="card-body">
+            <h6 class="card-title">{{ comment.author }}</h6>
+            <a class="text-decoration-none" data-bs-toggle="collapse" href="#comment{{ comment.id }}"
+               aria-expanded="false" aria-controls="comment{{ comment.id }}">
+              {{ comment.text }}
+            </a>
+          </div>
+        </div>
+
+        <!-- Відповіді -->
+        <div class="collapse" id="comment{{ comment.id }}">
+          <div class="card card-body mb-2">
+            <form class="mb-2" action="{% url 'answerCommentAdd' post.id comment.id %}" method="POST">
+              {% csrf_token %}
+              {{ form|crispy }}
+              <button type="submit" class="btn btn-sm btn-success mt-1">↩ Відповісти</button>
+            </form>
+
+            {% for answer in comment.answer.all %}
+              <div class="border rounded p-2 mb-2 bg-light">
+                <b>{{ answer.author }}:</b> {{ answer.text }}
+              </div>
+            {% empty %}
+              <div class="text-muted fst-italic">Поки відповідей немає</div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
     </div>
-    <div class="col-md-auto">
 
-    </div>
-    <div class="col col-lg-3">
-
+    <!-- Права колонка (можна використати для додаткової інформації) -->
+    <div class="col-lg-3">
+      <!-- Місце під віджети/рекламу/інші блоки -->
     </div>
   </div>
 </div>
 
-
-
-
-{%endblock%}
+{% endblock %}
