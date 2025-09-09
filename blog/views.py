@@ -34,6 +34,10 @@ def posts_list(request, post_type = None):
     categories = Category.objects.all()
     tags_all = Tag.objects.all()  # всі теги
 
+    new = request.GET.get("time_upd")
+    if new:
+        posts = posts.order_by("time_upd")
+
     if post_type:
         posts = posts.filter(postType = post_type)
 
@@ -50,6 +54,10 @@ def posts_list(request, post_type = None):
 
     posts = posts.annotate(average_rating=Avg("rating__rating"))
 
+    rate = request.GET.get("rate")
+    if rate:
+        posts = posts.order_by("-average_rating")
+
     return render(
         request,
         template_name="blog/main_list.html",
@@ -58,6 +66,7 @@ def posts_list(request, post_type = None):
             "categories": categories,
             "tags": tags_all,               # всі теги для форми
             "selected_tags": selected_tags,
+            "rate":rate
             # вибрані для збереження стану
         }
     )

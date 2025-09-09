@@ -43,6 +43,28 @@
         {% endfor %}
       </div>
     </div>
+<div class="form-check">
+    <input class="form-check-input"
+           type="checkbox"
+           id="rate_checkbox"
+           name="rate"
+           value="1"
+           {% if rate %}checked{% endif %}>
+    <label class="form-check-label" for="rate_checkbox">
+        Почати з найпопулярніших?
+    </label>
+</div>
+<div class="form-check">
+    <input class="form-check-input"
+           type="checkbox"
+           id="time_checkbox"
+           name="time_upd"
+           value="1"
+           {% if rate %}checked{% endif %}>
+    <label class="form-check-label" for="rate_checkbox">
+        Шукати найновіші?
+    </label>
+</div>
 
     <!-- Кнопка -->
     <div class="text-end">
@@ -77,8 +99,14 @@
         <div class="mb-3 text-center">
           {% if post.postType == "video" %}
             <a href="{% url 'post' post.id %}">
-              <video class="img-fluid rounded" style="max-width: 75%;" src="{{ post.video.url }}" controls></video>
-            </a>
+<div class="mb-4 text-center">
+  <video class="img-fluid rounded" preload="metadata" controls>
+    <source src="{{ post.video.url }}" type="video/mp4">
+    <source src="{{ post.video.url }}" type="video/webm">
+    <source src="{{ post.video.url }}" type="video/ogg">
+    Ваш браузер не підтримує відтворення відео.
+  </video>
+</div>            </a>
           {% elif post.postType == "img" %}
             <a href="{% url 'post' post.id %}">
               <img class="img-fluid rounded" style="max-width: 50%;" src="{{ post.img.url }}" alt="img">
@@ -109,6 +137,7 @@
             <span class="text-muted">Немає тегів</span>
           {% endfor %}
         </div>
+    <p>Дата оновлення: <b>{{post.time_upd}}</b></p>
 
       </div>
     </div>

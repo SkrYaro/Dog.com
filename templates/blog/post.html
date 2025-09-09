@@ -12,7 +12,7 @@
       <!-- Контент поста -->
       <div class="mb-4 text-center">
         {% if post.postType == "video" %}
-          <video class="img-fluid rounded" src="{{ post.video.url }}" controls></video>
+          <video controls class="img-fluid rounded" preload="metadata" playsinline src="{{post.video.url}}"  ></video>
         {% elif post.postType == "img" %}
           <img class="img-fluid rounded" src="{{ post.img.url }}" alt="image">
         {% else %}
@@ -106,7 +106,7 @@
     <div class="card card-body mb-2 bg-light">
       <form class="mb-2" action="{% url 'answerCommentAdd' post.id comment.id %}" method="POST">
         {% csrf_token %}
-        {{ form|crispy }}
+        {{ form|crispy|escape }}
         <button type="submit" class="btn btn-sm btn-success mt-1">↩ Відповісти</button>
       </form>
 
