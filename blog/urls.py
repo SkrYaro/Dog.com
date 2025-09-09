@@ -33,4 +33,11 @@ urlpatterns = [
     path("post/subs/" ,views.postSubs, name = "subsPost"),
 
     path("profiles/",views.profilesList,name="profiles"),
+
+    path("rate/<int:post_id>/<int:num>",crud.rate,name = "rate"),
+
+    path("rate/del/<int:post_id>/", crud.deleteRating, name="delRate"),
+
+    path("post/comment/delete/post_id:<int:post_id>/comment<int:comment_id>",crud.commentDelete, name = 'comDel'),
+
 ]

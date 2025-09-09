@@ -69,3 +69,15 @@ class Sub(models.Model):
             raise ValidationError("Ви не можете підписати на самого себе")
 
 
+class Rating(models.Model):
+    post = models.ForeignKey(Post,related_name="rating",on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile,related_name="owner",on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(default=0)
+
+    def __str__(self):
+        return {self.rating}
+
+    def clean(self):
+        if self.rating <= 0 or self.rating >5:
+            raise ValidationError("Рейтинг має бути від 1 до 5")
+

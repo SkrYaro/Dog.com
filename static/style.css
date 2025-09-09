@@ -1,3 +1,19 @@
-.post{
+.star-rating {
+  font-size: 1.8rem;
+}
 
+.star-link {
+  color: #ccc;
+  text-decoration: none;
+  margin-right: 5px;
+  transition: color 0.2s;
+}
+
+.star-link:hover,
+.star-link:hover ~ .star-link {
+  color: gold;
+}
+
+.star-link i.bi-star-fill {
+  color: gold;
 }

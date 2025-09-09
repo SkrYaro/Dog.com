@@ -2,12 +2,13 @@ import random
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.db.models import Avg
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import Resolver404
 
 from authSystem.models import Profile
 from blog.forms import ComentCreateForm
-from blog.models import Post, Comment, Sub, Category, Tag
+from blog.models import Post, Comment, Sub, Category, Tag, Rating
 
 
 # Create your views here.
@@ -47,6 +48,7 @@ def posts_list(request, post_type = None):
     if selected_tags:
         posts = posts.filter(tags__in=selected_tags).distinct()
 
+    posts = posts.annotate(average_rating=Avg("rating__rating"))
 
     return render(
         request,
@@ -55,7 +57,8 @@ def posts_list(request, post_type = None):
             "posts": posts,
             "categories": categories,
             "tags": tags_all,               # всі теги для форми
-            "selected_tags": selected_tags  # вибрані для збереження стану
+            "selected_tags": selected_tags,
+            # вибрані для збереження стану
         }
     )
 def draftList(request, user_id):
@@ -94,11 +97,22 @@ def adminDelete(request,post_id):
         raise PermissionDenied()
 
 def postView(request, post_id):
+    profile = get_object_or_404(Profile,id = request.user.id)
     post = get_object_or_404(Post,id = post_id)
     comments = Comment.objects.filter( post = post, answerOnYourself= None)
     form = ComentCreateForm()
     recs = recomend()
-    return render(request, template_name="blog/post.html",context={"post":post,"form":form,"comments":comments,"recs":recs})
+    try:
+        rate = get_object_or_404(Rating, post=post, user=profile)
+        rating = Rating.objects.filter(post=post).aggregate(Avg('rating'))['rating__avg']
+
+        return render(request, template_name="blog/post.html",
+                      context={"post": post, "form": form, "comments": comments, "recs": recs, "rating": rating,
+                               "rate": rate})
+    except:
+        rating = Rating.objects.filter(post=post).aggregate(Avg('rating'))['rating__avg']
+
+        return render(request, template_name="blog/post.html",context={"post":post,"form":form,"comments":comments,"recs":recs,"rating":rating})
 
 def postSubs(request):
     profile = get_object_or_404(Profile , id = request.user.id)

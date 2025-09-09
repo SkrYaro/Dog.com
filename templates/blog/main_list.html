@@ -68,7 +68,11 @@
       </div>
 
       <div class="card-body">
-
+        {%if not post.average_rating|floatformat:1%}
+          <h1>Середня оцінка:Поки немає оцінок</h1>
+        {%else%}
+        <h1>Середня оцінка:{{ post.average_rating}}</h1>
+        {%endif%}
         <!-- Контент -->
         <div class="mb-3 text-center">
           {% if post.postType == "video" %}

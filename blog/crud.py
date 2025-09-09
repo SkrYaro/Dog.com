@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 from blog.forms import ReactCreateForm, SketchCreateForm, VideoCreateForm, ComentCreateForm
-from blog.models import Post, Tag, Category, Comment, Sub
+from blog.models import Post, Tag, Category, Comment, Sub, Rating
 from authSystem.models import Profile
 
 
@@ -177,4 +177,36 @@ def desubscribe(request, user_id):
     except:
         return redirect("profile", user_id)
 
+def rate(request, post_id, num):
+    post = get_object_or_404(Post, id = post_id)
+    profile = get_object_or_404(Profile, id = request.user.id)
 
+    try:
+        rating = get_object_or_404(Rating, post = post, user=profile)
+        rating.delete()
+        rating = Rating.objects.create(post=post,user=profile,rating=num)
+        rating.save()
+    except:
+        rating = Rating.objects.create(post=post,user=profile,rating=num)
+        rating.save()
+    return redirect("post",post_id)
+
+def deleteRating(request,post_id):
+    post = get_object_or_404(Post, id=post_id)
+    profile = get_object_or_404(Profile, id=request.user.id)
+    try:
+        rating = get_object_or_404(Rating, post = post, user=profile)
+        rating.delete()
+    except:
+        pass
+    return redirect("post",post_id)
+
+def commentDelete(request, post_id,comment_id):
+    coment = get_object_or_404(Comment,id = comment_id)
+    post = get_object_or_404(Post, id = post_id)
+
+    if request.user == (coment.author.user or post.author.user) or request.user.is_staff:
+        coment.delete()
+        return redirect("post",post_id)
+    else:
+        raise PermissionDenied()
