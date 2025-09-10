@@ -210,3 +210,5 @@ def commentDelete(request, post_id,comment_id):
         return redirect("post",post_id)
     else:
         raise PermissionDenied()
+
+

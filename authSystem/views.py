@@ -53,8 +53,7 @@ def logout_view(request):
 class Profiles:
     home = 'profile'
 
-    @login_required
-    @staticmethod
+
 
     def profile_view(request, user_id):
         profile = get_object_or_404(Profile,id = user_id)
@@ -71,8 +70,6 @@ class Profiles:
             sub = False
 
         return render(request,template_name='profiles/profile.html', context={'profile':profile, "sub":sub,"intoSub":intoSub,"outoSub":outoSub})
-
-    @staticmethod
     @login_required
 
     def profile_edit(request, user_id):

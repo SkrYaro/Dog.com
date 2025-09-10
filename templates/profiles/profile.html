@@ -7,7 +7,7 @@
 
     <div class="col-md-4 text-center">
       <img src="{{ profile.ava.url }}" class="rounded-circle shadow mb-3" style="width: 60%;">
-
+    {%if user.is_authenticated%}
       {% if profile.user != request.user %}
         {% if sub %}
           <a href="{% url 'desub' profile.user.id %}" class="btn btn-outline-danger btn-sm mb-2">Відписатися</a>
@@ -15,7 +15,7 @@
           <a href="{% url 'sub' profile.user.id %}" class="btn btn-outline-success btn-sm mb-2">Підписатися</a>
         {% endif %}
       {% endif %}
-
+    {%endif%}
       <!-- Статистика -->
       <div class="d-flex justify-content-around mt-3">
         <div>

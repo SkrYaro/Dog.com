@@ -42,6 +42,8 @@ class Post(models.Model):
     category = models.ForeignKey(Category,related_name="themes",on_delete=models.CASCADE, null=True,blank=True)
     tags = models.ManyToManyField(Tag, related_name="tags",blank=True)
 
+    def __str__(self):
+        return self.name
 class Comment(models.Model):
     text = models.TextField()
     author = models.ForeignKey(Profile, related_name="comment", on_delete=models.CASCADE)
@@ -75,7 +77,7 @@ class Rating(models.Model):
     rating = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return {self.rating}
+        return f"{self.rating}--->{self.post}"
 
     def clean(self):
         if self.rating <= 0 or self.rating >5:

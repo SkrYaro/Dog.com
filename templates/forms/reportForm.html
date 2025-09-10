@@ -1,0 +1,19 @@
+{%extends "based/base.html"%}
+
+{% load crispy_forms_tags %}
+
+{%block content%}
+
+<label>
+    Створення рапорту
+</label>
+    <form class="mb-2" action="{% url 'reportCreate' %}" method="POST">
+{%csrf_token%}
+
+    {{form|crispy}}
+
+    {{first_com|crispy}}
+        <button type="submit">Підтвердити</button>
+</form>
+
+{%endblock%}

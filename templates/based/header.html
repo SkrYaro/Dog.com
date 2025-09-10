@@ -9,10 +9,12 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{%url 'profiles'%}">Канали</a>
         </li>
+          {%if request.user.is_authenticated%}
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{%url 'subsPost'%}">СноупДоги</a>
         </li>
-        <li class="nav-item dropdown ">
+            {%endif%}
+          <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Публікації</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{%url 'types_posts' 'video'%}">Відео</a></li>
@@ -23,7 +25,16 @@
                     <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Зв'язок</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="">Заявки</a></li>
-                        <li><a class="dropdown-item" href="">Проблеми</a></li>
+                                  {%if request.user.is_authenticated%}
+
+                        <li><a class="dropdown-item" href="{%url 'reportList' request.user.id %}">Проблеми</a></li>
+                        {% if request.user.is_staff%}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{%url 'adminReportList' %}">Список запросів</a></li>
+                        {%endif%}
+                       {%endif%}
+                                                        <li><hr class="dropdown-divider"></li>
+
                         <li><a class="dropdown-item" href="">Форум "ЧавоЩоРобити"</a></li>
                     </ul>
         </li>
