@@ -7,7 +7,7 @@
 <label>
     Створення рапорту
 </label>
-    <form class="mb-2" action="{% url 'reportCreate' %}" method="POST">
+    <form action="{% url 'reportCreate' %}" class="mb-2" enctype="multipart/form-data"  method="POST" >
 {%csrf_token%}
 
     {{form|crispy}}

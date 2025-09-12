@@ -4,7 +4,7 @@ from authSystem.models import Profile
 
 def message_img_path(instance, filename):
     ext = filename.split('.')[-1]
-    return f'message/{instance.user.username}.{ext}'
+    return f'message/{instance.user.user.username}.{ext}'
 class Dialog(models.Model):
     title = models.CharField(max_length=100, default="Some problems")
     closed = models.BooleanField(default=False)

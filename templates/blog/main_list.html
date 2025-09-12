@@ -62,7 +62,7 @@
            value="1"
            {% if rate %}checked{% endif %}>
     <label class="form-check-label" for="rate_checkbox">
-        Шукати найновіші?
+        Шукати старіші?
     </label>
 </div>
 
@@ -100,12 +100,21 @@
           {% if post.postType == "video" %}
             <a href="{% url 'post' post.id %}">
 <div class="mb-4 text-center">
-  <video class="img-fluid rounded" preload="metadata" controls>
-    <source src="{{ post.video.url }}" type="video/mp4">
-    <source src="{{ post.video.url }}" type="video/webm">
-    <source src="{{ post.video.url }}" type="video/ogg">
-    Ваш браузер не підтримує відтворення відео.
-  </video>
+  <div class="video-wrapper text-center mb-4">
+  <div class="ratio ratio-16x9 shadow-sm rounded overflow-hidden border">
+    {% if post.cover %}
+      <video class="w-100 h-100" preload="metadata" poster="{{ post.cover.url }}" controls>
+        <source src="{{ post.video.url }}" type="video/mp4">
+        Ваш браузер не підтримує відтворення відео.
+      </video>
+    {% else %}
+      <video class="w-100 h-100" preload="metadata" controls>
+        <source src="{{ post.video.url }}" type="video/mp4">
+        Ваш браузер не підтримує відтворення відео.
+      </video>
+    {% endif %}
+  </div>
+</div>
 </div>            </a>
           {% elif post.postType == "img" %}
             <a href="{% url 'post' post.id %}">

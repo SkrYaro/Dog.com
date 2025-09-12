@@ -9,7 +9,7 @@ class ReactCreateForm(forms.ModelForm):
     description = forms.CharField(label="Придумайте опис до реакції", max_length=100)
     category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
-    draft = forms.BooleanField(label="Дороблена версія?", required=False)
+    draft = forms.BooleanField(label="Залишити ,як чорняк", required=False)
 
     class Meta:
         model = Post
@@ -22,7 +22,7 @@ class SketchCreateForm(forms.ModelForm):
     img = forms.FileField(label="Загрузіть ваший витвір мистецтва")
     category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
-    draft = forms.BooleanField(label="Дороблена версія?", required=False)
+    draft = forms.BooleanField(label="Залишити ,як чорняк", required=False)
     class Meta:
         model = Post
         fields = ["name", "description", "img", "category", "tags", "draft"]
@@ -33,13 +33,14 @@ class VideoCreateForm(forms.ModelForm):
 
     description = forms.CharField(label="Придумайте опис до відео", max_length=100)
     video = forms.FileField(label="Загрузіть відео")
+    cover = forms.FileField(label="Обкладинка до відео",required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
     tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
-    draft = forms.BooleanField(label="Дороблена версія?", required=False)
+    draft = forms.BooleanField(label="Залишити ,як чорняк", required=False)
 
     class Meta:
         model = Post
-        fields = ["name", "description", "video", "category", "tags" , "draft"]
+        fields = ["name", "description", "video", 'cover',"category", "tags" , "draft"]
 
 
 class ComentCreateForm(forms.ModelForm):

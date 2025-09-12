@@ -11,6 +11,11 @@ def get_user_video_path(instanse , filename):
     ext = filename.split(".")[-1]
     return f'video/{instanse.author.user.username}.{ext}'
 
+def get_user_cover(instanse , filename):
+    ext = filename.split(".")[-1]
+    return f'cover/{instanse.author.user.username}.{ext}'
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
 
@@ -31,6 +36,7 @@ class Post(models.Model):
     postType = models.CharField(max_length=100,choices=types)
     name = models.CharField(max_length=50)
     video = models.FileField(upload_to=get_user_video_path, null=True, blank=True)
+    cover =  models.ImageField(upload_to=get_user_cover,null=True,blank=True)
     img = models.ImageField(upload_to=get_user_path, null=True, blank=True)
     react = models.TextField(null=True, blank=True )
     description = models.TextField( )

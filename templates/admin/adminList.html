@@ -34,6 +34,8 @@
             <div class="d-flex flex-column gap-2">
               <a href="{% url 'moderDelete' post.id %}" class="btn btn-outline-danger btn-sm">Видалити</a>
               <a href="{% url 'moderAccept' post.id %}" class="btn btn-success btn-sm">Підтвердити</a>
+              <a href="{% url 'edit' post.postType post.id post.author.id %}" class="btn btn-warning">Редагувати</a>
+
             </div>
           </div>
         </div>

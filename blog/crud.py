@@ -54,53 +54,46 @@ def postCreate(request, type):
 def postEdit(request, type , post_id,user_id):
     profile = get_object_or_404(Profile, id=user_id)
     post = get_object_or_404(Post, id = post_id)
-    if request.method == "POST":
-        match type:
-            case "react":
-                form = ReactCreateForm(request.POST,instance=post)
-                if form.is_valid():
-                    post = form.save(commit=False)
-                    post.postType = type
-                    post.author = profile
-                    post.draft = True
-                    post.accepted = False
+    if request.user == profile or request.user.is_staff:
+        if request.method == "POST":
+            match type:
+                case "react":
+                    form = ReactCreateForm(request.POST,instance=post)
+                case "video":
+                    form = VideoCreateForm(request.POST, request.FILES,instance=post)
+                case "img":
+                    form = SketchCreateForm(request.POST, request.FILES,instance=post)
+
+                case _:
+                    raise ValueError("Post type error")
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.author = profile
+                post.postType = type
+                post.accepted = False
+
+                if request.user.is_staff:
+                    post.accepted = True
                     post.save()
-                    return redirect("main")
-            case "video":
-                form = VideoCreateForm(request.POST, request.FILES,instance=post)
-                if form.is_valid():
-                    post = form.save(commit=False)
-                    post.author = profile
-                    post.postType = type
-                    post.draft = True
-                    post.accepted = False
+                    return redirect("moderatorList")
+                else:
                     post.save()
-                    return redirect("main")
-            case "img":
-                form = SketchCreateForm(request.POST, request.FILES,instance=post)
-                if form.is_valid():
-                    post = form.save(commit=False)
-                    post.author = profile
-                    post.postType = type
-                    post.draft = True
-                    post.accepted = False
-                    post.save()
-                    return redirect("main")
-            case _:
-                raise ValueError("Post type error")
+                    return redirect("drafts", request.user.id)
+
+        else:
+            match type:
+                case "video":
+                    form = VideoCreateForm(instance=post)
+                case "img":
+                    form = SketchCreateForm(instance=post)
+                case "react":
+                    form = ReactCreateForm(instance=post)
+                case _:
+                    raise ValueError("Post type error")
+
+        return render(request, template_name="forms/formEdit.html", context={"form":form, "profile": profile, "post":post,"type":type})
     else:
-        match type:
-            case "video":
-                form = VideoCreateForm(instance=post)
-            case "img":
-                form = SketchCreateForm(instance=post)
-            case "react":
-                form = ReactCreateForm(instance=post)
-            case _:
-                raise ValueError("Post type error")
-
-    return render(request, template_name="forms/formEdit.html", context={"form":form, "profile": profile, "post":post,"type":type})
-
+        raise PermissionDenied()
 
 def postDelete(request, post_id):
     post = get_object_or_404(Post, id=post_id)

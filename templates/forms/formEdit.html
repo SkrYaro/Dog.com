@@ -18,8 +18,11 @@
   {{form|crispy}}
 <!--  <a href="">Хочете створити свій тег , так подайте сюди заявку на тег! Протягом дня її приймуть !</a>-->
 <!--  <hr>-->
-
+    {%if request.user.is_staff and post.author != request.user%}
+  <button type="submit">Підтвердити зміни і викласти </button>
+    {%else%}
   <button type="submit">Створити пост</button>
+    {%endif%}
 </form>
 
 {%endblock%}

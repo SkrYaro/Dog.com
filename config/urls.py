@@ -24,6 +24,7 @@ urlpatterns = [
     path('' , include('authSystem.urls')),
     path('',include('blog.urls')),
     path("",include("panel.urls")),
+    path("",include("chat.urls"))
 ]
 
 if settings.DEBUG:

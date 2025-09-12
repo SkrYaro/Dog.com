@@ -25,14 +25,19 @@
                     <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Зв'язок</a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="">Заявки</a></li>
-                                  {%if request.user.is_authenticated%}
+                        {%if request.user.is_authenticated%}
 
-                        <li><a class="dropdown-item" href="{%url 'reportList' request.user.id %}">Проблеми</a></li>
+                            <li><a class="dropdown-item" href="{%url 'reportList' request.user.id %}">Проблеми</a></li>
+
+
                         {% if request.user.is_staff%}
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="{%url 'adminReportList' %}">Список запросів</a></li>
-                        {%endif%}
+
+
+
                        {%endif%}
+                        {%endif%}
                                                         <li><hr class="dropdown-divider"></li>
 
                         <li><a class="dropdown-item" href="">Форум "ЧавоЩоРобити"</a></li>
@@ -64,7 +69,7 @@
             {% if request.user.is_staff%}
                 <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin">Адмінська панель</a></li>
                 <li><a class="dropdown-item" href="{%url 'moderatorList'%}">Адмінська провірка</a></li>
-                <li><a class="dropdown-item" href="">Адмінський форум</a></li>
+                <li><a class="dropdown-item" href="{%url 'adminChat'%}">Адмінський форум</a></li>
                               <li><hr class="dropdown-divider"></li>
 
             {%endif%}

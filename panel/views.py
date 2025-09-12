@@ -21,8 +21,8 @@ def chat_list(request, user_id):
 
 def chat(request , chat_id):
     chat = get_object_or_404(Dialog, id = chat_id)
-    profile = get_object_or_404(Profile , id = request.user.id)
-    if chat.user.user.user == request.user or request.user.is_staff or True:
+    profile = get_object_or_404(Profile , user = request.user)
+    if chat.user.user == request.user or request.user.is_staff:
         try:
             speaks = Speak.objects.filter(dialog=chat)
         except:
@@ -34,8 +34,10 @@ def chat(request , chat_id):
                     message = form.save(commit=False)
                     message.user = profile
                     message.dialog = chat
-                    if request.user.is_staff:
+                    if request.user.is_staff and chat.user.user != request.user:
                         message.speak = "answer"
+                    elif chat.user.user  == request.user:
+                        message.speak = "ask"
                     else:
                         message.speak = "ask"
                     message.save()
@@ -55,14 +57,13 @@ def close(request,chat_id):
     chat.closed = True
     chat.time_end = datetime.timezone.now()
     chat.save()
-    return render(request,template_name="report/chat.html",context={"chat":chat})
-
+    return redirect("adminReportList")
 
 def createReport(request):
     profile = get_object_or_404(Profile , id = request.user.id)
     if request.method == "POST":
         form = DialogForm(request.POST)
-        first_com = MessageForm(request.POST)
+        first_com = MessageForm(request.POST, request.FILES)
         if form.is_valid() and first_com.is_valid():
             dialog = form.save(commit=False)
             dialog.user = profile

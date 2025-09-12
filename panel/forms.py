@@ -3,10 +3,10 @@ from panel.models import Speak, Dialog
 
 
 class MessageForm(forms.ModelForm):
-    img = forms.ImageField(required=False)
+    image = forms.ImageField(required=False)
     class Meta:
         model = Speak
-        fields = ["writes","img"]
+        fields = ["writes","image"]
 
 
 class DialogForm(forms.ModelForm):
