@@ -1,0 +1,77 @@
+{% extends "based/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container my-4">
+
+  <!-- Заголовок чату -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h4 class="card-title">{{ chat.title }}</h4>
+      <p class="mb-1 text-muted">Користувач: {{ chat.user }}</p>
+      <p class="mb-1">Початок: {{ chat.time_start }}</p>
+      {% if chat.closed %}
+        <span class="badge bg-danger">Закритий чат: {{ chat.time_end }}</span>
+      {% else %}
+        <span class="badge bg-success">Відкритий чат</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Повідомлення -->
+  <div class="d-flex flex-column gap-3 mb-4 p-3 border rounded" style="height: 400px; overflow-y: auto; background-color: #f8f9fa;">
+    {% for speak in speaks %}
+      {% if speak.speak == "ask" %}
+        <!-- Питання зліва -->
+        <div class="d-flex justify-content-start">
+          <div class="p-3 bg-light rounded shadow-sm" style="max-width: 70%;">
+            <p class="mb-1"><strong>{{ speak.user }}</strong></p>
+            <p class="mb-1">{{ speak.writes }}</p>
+            {% if speak.image %}
+              <img src="{{ speak.image.url }}" alt="image" class="img-fluid rounded mt-2" style="max-height: 150px;">
+            {% endif %}
+          </div>
+        </div>
+      {% else %}
+        <!-- Відповідь справа -->
+        <div class="d-flex justify-content-end">
+          <div class="p-3 bg-primary text-white rounded shadow-sm" style="max-width: 70%;">
+            <p class="mb-1"><strong>{{ speak.user }}</strong></p>
+            <p class="mb-1">{{ speak.writes }}</p>
+            {% if speak.image %}
+              <img src="{{ speak.image.url }}" alt="image" class="img-fluid rounded mt-2" style="max-height: 150px;">
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    {% empty %}
+      <div class="alert alert-info">Повідомлень ще немає</div>
+    {% endfor %}
+  </div>
+
+  {% if not chat.closed %}
+    <!-- Форма для нового повідомлення -->
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <h5 class="card-title">Нове повідомлення</h5>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary">Надіслати</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    {% if request.user.is_staff %}
+      <div class="text-end">
+        <a href="{% url 'closeChat' chat.id %}" class="btn btn-danger">Закрити чат</a>
+      </div>
+    {% endif %}
+
+  {% else %}
+    <div class="alert alert-warning text-center">Чат закритий</div>
+  {% endif %}
+
+</div>
+{% endblock %}

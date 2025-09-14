@@ -22,5 +22,10 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls , name = 'admin'),
     path('' , include('authSystem.urls')),
-    path('',include('blog.urls'))
-] + static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)
+    path('',include('blog.urls')),
+    path("",include("panel.urls")),
+    path("",include("chat.urls"))
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)

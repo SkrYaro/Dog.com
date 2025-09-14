@@ -1,0 +1,29 @@
+{% extends "based/base.html" %}
+{% block content %}
+
+<div class="container my-4">
+  <h1 class="text-center mb-4">Користувачі</h1>
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+
+    {% for profile in profiles %}
+      <div class="col">
+        <div class="card h-100 text-center shadow-sm">
+          <img src="{{ profile.ava.url }}" class="card-img-top rounded-circle mx-auto mt-3"
+               style="width: 60%; object-fit: cover;" alt="avatar">
+          <div class="card-body">
+            <a href="{% url 'profile' profile.id %}" class="card-title h5 text-decoration-none">{{ profile.name }}</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col">
+        <div class="alert alert-info text-center w-100">
+          Користувачів поки немає
+        </div>
+      </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+{% endblock %}

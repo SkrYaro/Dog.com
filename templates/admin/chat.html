@@ -1,0 +1,111 @@
+{% extends "based/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<style>
+.chat-box {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 15px;
+  background: #e5ddd5;
+  border-radius: 10px;
+}
+.message {
+  max-width: 60%;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border-radius: 15px;
+  position: relative;
+  word-wrap: break-word;
+}
+.message img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+.message small {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 5px;
+  color: #555;
+  text-align: right;
+}
+.message.mine {
+  margin-left: auto;
+  background: #dcf8c6; /* зелена бульбашка */
+}
+.message.theirs {
+  margin-right: auto;
+  background: #fff; /* сіра бульбашка */
+}
+.username {
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-bottom: 3px;
+  color: #075e54; /* WhatsApp зелений */
+}
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  font-size: 0.7rem;
+  color: #888;
+  text-decoration: none;
+}
+.delete-btn:hover {
+  color: red;
+}
+</style>
+
+<div class="container my-4">
+  <h3 class="mb-3">Адмінський чат</h3>
+
+  <!-- Список повідомлень -->
+  <div class="chat-box mb-4 shadow-sm" id="chat-box">
+    {% for chat in chats %}
+      <div class="message {% if chat.author.user == request.user %}mine{% else %}theirs{% endif %}">
+        <!-- Кнопка видалення -->
+        {%if chat.author.user == request.user%}
+        <a href="{% url 'mesDelete' chat.id %}" class="delete-btn">✕</a>
+        {%endif%}
+
+        <!-- Ім'я юзера -->
+        <div class="username">{{ chat.author.user.username }}</div>
+
+        <!-- Текст -->
+        <p class="mb-1">{{ chat.text }}</p>
+
+        <!-- Картинка -->
+        {% if chat.img %}
+          <img src="{{ chat.img.url }}" alt="chat image">
+        {% endif %}
+
+        <!-- Час -->
+        <small>{{ chat.time_add }}</small>
+      </div>
+    {% empty %}
+      <p class="text-muted">Повідомлень поки немає.</p>
+    {% endfor %}
+  </div>
+
+  <!-- Форма -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form action="{% url 'adminChat' %}" method="POST" enctype="multipart/form-data" class="d-flex align-items-center">
+        {% csrf_token %}
+        <div class="flex-grow-1 me-2">
+          {{ form|crispy }}
+        </div>
+        <button type="submit" class="btn btn-success">➤</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- автоскрол до останнього повідомлення -->
+<script>
+  const chatBox = document.getElementById("chat-box");
+  chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+
+{% endblock %}

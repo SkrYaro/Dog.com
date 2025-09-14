@@ -1,0 +1,43 @@
+{% extends "based/base.html" %}
+{% block content %}
+
+<div class="container my-4">
+  <h1 class="text-center mb-4">Пости від користувачів</h1>
+
+  {% for post in posts %}
+    {% if post.accepted %}
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <!-- Назва -->
+          <a href="{% url 'post' post.id %}" class="text-decoration-none">
+            <h3 class="card-title">{{ post.name }}</h3>
+          </a>
+
+          <!-- Контент -->
+          <div class="mb-3 text-center">
+            {% if post.postType == "video" %}
+              <a href="{% url 'post' post.id %}">
+                <video class="img-fluid rounded" style="max-width:75%;" src="{{ post.video.url }}" controls></video>
+              </a>
+            {% elif post.postType == "img" %}
+              <a href="{% url 'post' post.id %}">
+                <img class="img-fluid rounded" style="max-width:50%;" src="{{ post.img.url }}" alt="post image">
+              </a>
+            {% elif post.postType == "react" %}
+              <p class="fst-italic">{{ post.react }}</p>
+            {% endif %}
+          </div>
+
+          <!-- Опис -->
+          <p class="card-text"><strong>{{ post.description }}</strong></p>
+        </div>
+      </div>
+    {% endif %}
+  {% empty %}
+    <div class="alert alert-info text-center">
+      Поки немає постів від ваших кумирів. Можливо, варто підписатися на інших, хто створює контент?
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
