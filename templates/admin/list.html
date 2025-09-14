@@ -1,0 +1,62 @@
+{% extends "based/base.html" %}
+{% block content %}
+<div class="container my-4">
+
+  <!-- Відкриті чати -->
+  <h2 class="mb-3">Відкриті рапорти</h2>
+  {% for chat in chats %}
+    {% if not chat.closed %}
+      <div class="card shadow-sm mb-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              <a href="{% url 'reportChat' chat.id %}" class="text-decoration-none">
+                {{ chat.title }}
+              </a>
+            </h5>
+            <span class="badge bg-success">Не закритий</span>
+          </div>
+          <p class="mb-1 text-muted">Користувач: {{ chat.user }}</p>
+          <p class="mb-2">Початок: {{ chat.time_start }}</p>
+          <a href="{% url 'adminReportDelete' chat.id %}"
+             class="btn btn-sm btn-outline-danger">
+            Видалити
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  {% empty %}
+    <div class="alert alert-info">Немає відкритих рапортів</div>
+  {% endfor %}
+
+  <hr class="my-4">
+
+  <!-- Закриті чати -->
+  <h2 class="mb-3">Закриті рапорти</h2>
+  {% for chat in chats %}
+    {% if chat.closed %}
+      <div class="card shadow-sm mb-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+              <a href="{% url 'reportChat' chat.id %}" class="text-decoration-none">
+                {{ chat.title }}
+              </a>
+            </h5>
+            <span class="badge bg-danger">Закритий ({{ chat.time_end }})</span>
+          </div>
+          <p class="mb-1 text-muted">Користувач: {{ chat.user }}</p>
+          <p class="mb-2">Початок: {{ chat.time_start }}</p>
+          <a href="{% url 'adminReportDelete' chat.id %}"
+             class="btn btn-sm btn-outline-danger">
+            Видалити
+          </a>
+        </div>
+      </div>
+    {% endif %}
+  {% empty %}
+    <div class="alert alert-info">Немає закритих рапортів</div>
+  {% endfor %}
+
+</div>
+{% endblock %}

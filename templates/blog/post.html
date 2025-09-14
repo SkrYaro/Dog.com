@@ -1,0 +1,132 @@
+{% extends "based/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<div class="container my-4">
+  <div class="row">
+    <div class="col-lg-9">
+
+      <!-- Назва поста -->
+      <h1 class="mb-4">{{ post.name }}</h1>
+
+      <!-- Контент поста -->
+      <div class="mb-4 text-center">
+        {% if post.postType == "video" %}
+          <video controls class="img-fluid rounded" preload="metadata" playsinline src="{{post.video.url}}"></video>
+        {% elif post.postType == "img" %}
+          <img class="img-fluid rounded" src="{{ post.img.url }}" alt="image">
+        {% else %}
+          <p class="fst-italic">{{ post.react }}</p>
+        {% endif %}
+      </div>
+
+      <!-- Accordion опис -->
+      <div class="accordion mb-4" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Опис
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+               data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <p class="mb-2">
+                Автор: <a href="{% url 'profile' post.author.id %}">{{ post.author }}</a>
+              </p>
+              <div class="card">
+                <div class="card-body">{{ post.description }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<!--    оцінка поста  -->
+
+<!--      -->
+     <!-- Горизонтальна оцінка кнопками -->
+<div class="mb-4">
+  {%if rating%}
+  <h5 class="fw-bold">⭐ Середня оцінка: <span class="text-warning">{{ rating }}</span></h5>
+  {%else%}
+    <h5 class="fw-bold">⭐ Середня оцінка: <span class="text-warning">Немає оцінок</span></h5>
+
+  {%endif%}
+  {%if rate%}
+  <h5>Ви поставили :<b  class="text-warning">{{rate.rating}}</b></h5>
+  {%else%}
+    <h5>Ви поставили :<b  class="text-warning">Поки нічого</b></h5>
+  {%endif%}
+
+  <div class="d-flex gap-2 mt-2">
+    <a href="{% url 'rate' post.id 1 %}" class="btn btn-outline-warning">1 ⭐</a>
+    <a href="{% url 'rate' post.id 2 %}" class="btn btn-outline-warning">2 ⭐</a>
+    <a href="{% url 'rate' post.id 3 %}" class="btn btn-outline-warning">3 ⭐</a>
+    <a href="{% url 'rate' post.id 4 %}" class="btn btn-outline-warning">4 ⭐</a>
+    <a href="{% url 'rate' post.id 5 %}" class="btn btn-outline-warning">5 ⭐</a>
+    <a href="{%url 'delRate' post.id%}" class="btn btn-outline-danger">Відмінити оцінку</a>
+  </div>
+</div>
+
+
+      <!-- Форма додавання коментаря -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <form action="{% url 'commentAdd' post.id %}" method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+
+            <button type="submit" class="btn btn-primary mt-2">💬 Надіслати коментар</button>
+          </form>
+        </div>
+      </div>
+
+    <!-- Список коментарів -->
+<h4 class="mb-3">Коментарі:</h4>
+{% for comment in comments %}
+<div class="card mb-3 shadow-sm">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-start">
+      <div>
+        <h6 class="card-title mb-1">{{ comment.author }}</h6>
+        <p class="card-text">{{ comment.text }}</p>
+
+        <!-- Кнопка для показу відповідей -->
+        <button class="btn btn-sm btn-outline-secondary"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#comment{{ comment.id }}">
+          ↩ Відповіді
+        </button>
+      </div>
+      {% if request.user == comment.author.user or request.user == post.author.user or request.user.is_staff %}
+        <a href="{% url 'comDel' post.id comment.id %}" class="btn btn-sm btn-outline-danger">
+          Видалити
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Блок відповідей -->
+<div class="collapse" id="comment{{ comment.id }}">
+  <div class="card card-body mb-2 bg-light">
+    <form class="mb-2" action="{% url 'answerCommentAdd' post.id comment.id %}" method="POST">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button type="submit" class="btn btn-sm btn-success mt-1">↩ Відповісти</button>
+    </form>
+
+    {% for answer in comment.answer.all %}
+      <div class="border rounded p-2 mb-2 bg-white shadow-sm">
+        <b>{{ answer.author }}:</b> {{ answer.text }}
+      </div>
+    {% empty %}
+      <div class="text-muted fst-italic">Поки відповідей немає</div>
+    {% endfor %}
+  </div>
+</div>
+{%endfor  %}
+
+{% endblock %}

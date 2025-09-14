@@ -1,0 +1,41 @@
+{% extends "based/base.html" %}
+{% block content %}
+<div class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Ваші чати</h2>
+    <a href="{% url 'reportCreate' %}" class="btn btn-primary btn-sm">
+      Написати рапорт
+    </a>
+  </div>
+
+  {% for chat in chats %}
+    <div class="card shadow-sm mb-3">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <!-- Назва чату -->
+          <h5 class="card-title mb-0">
+            <a href="{% url 'reportChat' chat.id %}" class="text-decoration-none">
+              {{ chat.title }}
+            </a>
+          </h5>
+
+          <!-- Статус -->
+          {% if chat.closed %}
+            <span class="badge bg-danger">Закритий ({{ chat.time_end }})</span>
+          {% else %}
+            <span class="badge bg-success">Не закритий</span>
+          {% endif %}
+        </div>
+
+        <!-- Автор -->
+        <p class="mb-1 text-muted">Користувач: {{ chat.user }}</p>
+
+        <!-- Час початку -->
+        <p class="mb-0">Початок: {{ chat.time_start }}</p>
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-info">У вас немає питань</div>
+  {% endfor %}
+</div>
+{% endblock %}

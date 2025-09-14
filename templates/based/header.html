@@ -1,0 +1,89 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary"  data-bs-theme="dark">
+  <div class="container-fluid" >
+    <a class="navbar-brand" href="{%url 'main'%}">Dog-Dot-Com</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{%url 'profiles'%}">Канали</a>
+        </li>
+          {%if request.user.is_authenticated%}
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{%url 'subsPost'%}">СноупДоги</a>
+        </li>
+            {%endif%}
+          <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Публікації</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{%url 'types_posts' 'video'%}">Відео</a></li>
+                        <li><a class="dropdown-item" href="{%url 'types_posts' 'react'%}">Реакції</a></li>
+                        <li><a class="dropdown-item" href="{%url 'types_posts' 'img'%}">Скетчи</a></li>
+                    </ul>
+        <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Зв'язок</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="">Заявки</a></li>
+                        {%if request.user.is_authenticated%}
+
+                            <li><a class="dropdown-item" href="{%url 'reportList' request.user.id %}">Проблеми</a></li>
+
+
+                        {% if request.user.is_staff%}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{%url 'adminReportList' %}">Список запросів</a></li>
+
+
+
+                       {%endif%}
+                        {%endif%}
+                                                        <li><hr class="dropdown-divider"></li>
+
+                        <li><a class="dropdown-item" href="">Форум "ЧавоЩоРобити"</a></li>
+                    </ul>
+        </li>
+          {%if request.user.is_authenticated%}
+        <li class="nav-item " >
+
+            <a class="nav-link active" href="{%url 'drafts' request.user.id%}">Творча студія</a>
+        </li>
+          {%endif%}
+          {%if request.user.is_authenticated%}
+          <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{request.user.user.name}}
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{%url 'profile' request.user.id%}">Ваш профіль</a></li>
+            <li><a class="dropdown-item" href="{%url 'profileEdit' request.user.id%}">Змінити профіль</a></li>
+            <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="{%url 'create' 'video' %}">Загрузити відео</a></li>
+                <li><a class="dropdown-item" href="{%url 'create' 'sketch' %}">Створити скетч</a></li>
+                <li><a class="dropdown-item" href="{%url 'create' 'react' %}">Написати реакцію</a></li>
+
+              <li><hr class="dropdown-divider"></li>
+
+
+
+            {% if request.user.is_staff%}
+                <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin">Адмінська панель</a></li>
+                <li><a class="dropdown-item" href="{%url 'moderatorList'%}">Адмінська провірка</a></li>
+                <li><a class="dropdown-item" href="{%url 'adminChat'%}">Адмінський форум</a></li>
+                              <li><hr class="dropdown-divider"></li>
+
+            {%endif%}
+              {%else%}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{%url 'login'%}">Залогінтесь для діяльності</a>
+                </li>
+              {%endif%}
+
+            <li><a class="dropdown-item" href="{%url 'logout'%}">Вийти</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+

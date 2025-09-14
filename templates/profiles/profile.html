@@ -1,0 +1,67 @@
+{% extends "based/base.html" %}
+{% block content %}
+
+<div class="container my-4">
+  <div class="row">
+
+
+    <div class="col-md-4 text-center">
+      <img src="{{ profile.ava.url }}" class="rounded-circle shadow mb-3" style="width: 60%;">
+    {%if user.is_authenticated%}
+      {% if profile.user != request.user %}
+        {% if sub %}
+          <a href="{% url 'desub' profile.user.id %}" class="btn btn-outline-danger btn-sm mb-2">Відписатися</a>
+        {% elif not sub %}
+          <a href="{% url 'sub' profile.user.id %}" class="btn btn-outline-success btn-sm mb-2">Підписатися</a>
+        {% endif %}
+      {% endif %}
+    {%endif%}
+      <!-- Статистика -->
+      <div class="d-flex justify-content-around mt-3">
+        <div>
+          <b>Підписки:</b> {{ intoSub }}
+        </div>
+        <div>
+          <b>Фоловери:</b> {{ outoSub }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Основна інформація -->
+    <div class="col-md-8">
+      <div class="card shadow-sm mb-3">
+        <div class="card-body">
+          <strong class="text-muted mb-1">Юзернейм:</strong>
+                      <h3 class="card-title">{{ profile.name }}</h3>
+
+          {% if profile.isOpen %}
+            <p><b>Ім'я:</b> {{ profile.first_name }}</p>
+            <p><b>Прізвище:</b> {{ profile.last_name }}</p>
+            <p><b>Email:</b> {{ profile.email }}</p>
+          {% endif %}
+          <p class="mt-2"><strong>Опис:</strong>{{ profile.bio }}</p>
+        </div>
+      </div>
+
+      <!-- Пости користувача -->
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h5 class="mb-0">Пости користувача</h5>
+        </div>
+        <div class="card-body">
+          {% for post in profile.posts.all %}
+            <div class="mb-2">
+              <a href="{% url 'post' post.id %}" class="fw-bold">{{ post.name }}</a>
+              <span class="text-muted"> — оновлено {{ post.time_upd }}</span>
+            </div>
+          {% empty %}
+            <p class="text-muted">Постів поки немає</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

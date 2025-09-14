@@ -1,0 +1,51 @@
+{% extends "based/base.html" %}
+{% block content %}
+
+<div class="container my-4">
+  <h1 class="mb-4 text-center">Пости на модерації</h1>
+
+  {% for post in posts %}
+    {% if not post.accepted and not post.draft %}
+      <div class="card mb-4 shadow-sm">
+        <div class="row g-0">
+          <!-- Медіа (зображення, відео, react) -->
+          <div class="col-md-8 p-3">
+            <h2 class="card-title">{{ post.name }}</h2>
+
+            {% if post.postType == "img" %}
+              <img src="{{ post.img.url }}" class="img-fluid rounded" alt="post image">
+            {% elif post.postType == "video" %}
+              <video class="w-100 rounded" controls>
+                <source src="{{ post.video.url }}" type="video/mp4">
+              </video>
+            {% elif post.postType == "react" %}
+              <p class="fs-5">{{ post.react }}</p>
+            {% endif %}
+
+            <p class="mt-2 mb-0"><b>Автор:</b> {{ post.contentMaker }}</p>
+            <small class="text-muted">Оновлено: {{ post.time_upd }}</small>
+          </div>
+
+          <!-- Опис + дії -->
+          <div class="col-md-4 p-3 border-start">
+            <h5>Опис</h5>
+            <p>{{ post.description }}</p>
+
+            <div class="d-flex flex-column gap-2">
+              <a href="{% url 'moderDelete' post.id %}" class="btn btn-outline-danger btn-sm">Видалити</a>
+              <a href="{% url 'moderAccept' post.id %}" class="btn btn-success btn-sm">Підтвердити</a>
+              <a href="{% url 'edit' post.postType post.id post.author.id %}" class="btn btn-warning">Редагувати</a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% empty %}
+    <div class="alert alert-info text-center">
+      Немає постів для модерації
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

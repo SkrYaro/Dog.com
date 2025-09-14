@@ -1,0 +1,33 @@
+{% extends "based/base.html" %}
+{% block content %}
+
+<div class="container my-4">
+  <h1 class="text-center mb-4">Творча студія</h1>
+
+  {% for post in posts %}
+    <div class="card mb-3 shadow-sm">
+      <div class="card-body">
+        <h2 class="card-title">{{ post.name }}</h2>
+        <p class="card-text">{{ post.description }}</p>
+
+        {% if post.draft %}
+          <span class="badge bg-warning text-dark">[Поки не у відкритому доступі]</span>
+        {% endif %}
+
+        <div class="mt-3">
+          <a href="{% url 'delete' post.id %}" class="btn btn-danger btn-sm">Видалити</a>
+          <a href="{% url 'edit' post.postType post.id request.user.id %}" class="btn btn-primary btn-sm">Редагувати</a>
+          {% if post.draft %}
+            <a href="{% url 'draftConfirm' post.id %}" class="btn btn-success btn-sm">Підтвердити пост</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-info text-center">
+      Постів поки немає
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
