@@ -1,6 +1,22 @@
 {% extends "based/base.html" %}
 {% block content %}
+<div class="search container my-4">
 
+    <form method="GET" class="p-4 border rounded-3 bg-light shadow-sm">
+
+    <!-- Пошук за назвою -->
+    <div class="mb-3">
+      <label for="nameSearch" class="form-label fw-bold">Канали</label>
+      <input type="text" id="nameSearch" name="name"
+             class="form-control"
+             placeholder="Введіть назву..."
+             value="{{ selected_name }}">
+    </div>
+      <div class="text-end">
+      <button type="submit" class="btn btn-primary px-4">🔍 Пошук</button>
+    </div>
+    </form>
+</div>
 <div class="container my-4">
   <h1 class="text-center mb-4">Користувачі</h1>
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">

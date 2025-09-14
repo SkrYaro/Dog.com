@@ -1,0 +1,101 @@
+{% extends "based/base.html" %}
+{% block content %}
+
+<h1 class="mb-4">Форум "ЧавоЩоРобити"</h1>
+
+<div class="row row-cols-1 row-cols-md-2 g-3">
+{% for blank in blanks %}
+  <div class="col">
+    <div class="card h-100 shadow-sm">
+      {% if blank.img %}
+        <img src="{{ blank.img.url }}" class="card-img-top" alt="Post image">
+      {% endif %}
+
+      <div class="card-body py-2 px-3">
+        <h5 class="card-title mb-2">
+          <a href="{% url 'blank' blank.id %}" class="text-decoration-none text-dark">
+            {{ blank.title }}
+          </a>
+        </h5>
+        <p class="card-text mb-1">{{ blank.text|truncatechars:120 }}</p>
+      </div>
+
+      <div class="card-footer py-2 px-3">
+        <div class="d-flex justify-content-between align-items-center text-muted">
+          <small>Автор: {{ blank.author }}</small>
+          <small>
+            {{ blank.time_add|date:"d M Y H:i" }}
+            {% if blank.time_upd %}
+              | Оновлено: {{ blank.time_upd|date:"d M Y H:i" }}
+            {% endif %}
+          </small>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-2">
+
+
+          {% if request.user.is_staff %}
+          <div class="post-actions d-flex gap-2">
+            {% if not blank.confirmed %}
+              <a href="{% url 'acceptBlank' blank.id %}" class="btn btn-success btn-sm">✅ Підтвердити</a>
+            {% endif %}
+            <a href="{% url 'editBlank' blank.id %}" class="btn btn-warning btn-sm">✏️ Змінити</a>
+            <a href="{% url 'deleteBlank' blank.id %}" class="btn btn-danger btn-sm">🗑 Видалити</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
+
+<style>
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.card {
+  border-radius: 10px;
+  transition: box-shadow 0.2s ease;
+}
+.card:hover {
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.card-title a:hover {
+  text-decoration: underline;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.card-footer {
+  background: #fafafa;
+  border-top: 1px solid #eee;
+}
+
+.card-footer small {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.post-actions .btn {
+  border-radius: 6px;
+  font-size: 0.8rem;
+  transition: transform 0.15s ease;
+}
+.post-actions .btn:hover {
+  transform: translateY(-2px);
+}
+</style>
+
+{% endblock %}

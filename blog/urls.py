@@ -40,4 +40,5 @@ urlpatterns = [
 
     path("post/comment/delete/post_id:<int:post_id>/comment<int:comment_id>",crud.commentDelete, name = 'comDel'),
 
+    path("subs/list/user:<int:user_id>/",views.subs,name = "subs")
 ]

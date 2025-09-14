@@ -27,7 +27,13 @@ def recomend():
 
 def profilesList(request):
     profiles = Profile.objects.all()
-    return render(request,template_name="profiles/profiles.html", context={"profiles":profiles})
+    name = request.GET.get("name")
+    if name:
+        profiles = profiles.filter(name__icontains=name)
+
+    profiles = profiles.order_by("?")
+
+    return render(request, "profiles/profiles.html", {"profiles": profiles})
 
 def posts_list(request, post_type = None):
     posts = Post.objects.all()
@@ -127,7 +133,39 @@ def postSubs(request):
     profile = get_object_or_404(Profile , id = request.user.id)
     subs = list(Sub.objects.filter(fan = profile).values_list("author_id",flat=True))
     posts = Post.objects.filter(author_id__in = subs)
-    return render(request, template_name="subs/sub_list.html", context={"posts":posts})
+
+    categories = Category.objects.all()
+    tags_all = Tag.objects.all()  # всі теги
+
+    new = request.GET.get("time_upd")
+    if new:
+        posts = posts.order_by("time_upd")
+
+    # Фільтр по категорії
+    category = request.GET.get("category")
+    if category:
+        posts = posts.filter(category_id=category)
+    name = request.GET.get("name")
+    if name:
+        posts = posts.filter(name__icontains=name)
+    selected_tags = request.GET.getlist("tags")  # список вибраних id
+    if selected_tags:
+        posts = posts.filter(tags__in=selected_tags).distinct()
+
+    posts = posts.annotate(average_rating=Avg("rating__rating"))
+
+    rate = request.GET.get("rate")
+    if rate:
+        posts = posts.order_by("-average_rating")
+
+
+
+
+    return render(request, template_name="blog/main_list.html", context={"posts": posts,
+            "categories": categories,
+            "tags": tags_all,               # всі теги для форми
+            "selected_tags": selected_tags,
+            "rate":rate})
 
 def fansList(request):
     profile = get_object_or_404(Profile, id = request.user.id)
@@ -136,3 +174,9 @@ def fansList(request):
 
     return render(request, template_name="subs/subs_list.html", context={"intoSub":intoSub, "outoSub":outoSub})
 
+def subs(request,user_id):
+    profile = get_object_or_404(Profile, id = user_id)
+    intoSubs = Sub.objects.filter(fan=profile)
+    outoSubs = Sub.objects.filter(author=profile)
+
+    return render(request, template_name="subs/subs_detail.html", context={"intosubs":intoSubs, "outosubs":outoSubs,"profile":profile})
