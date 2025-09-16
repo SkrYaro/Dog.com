@@ -21,6 +21,7 @@ def postCreate(request, type):
                     react.author = profile
                     react.postType = type
                     react.save()
+                    form.save_m2m()
                     return redirect("drafts" ,request.user.id)
             case "video":
                 form = VideoCreateForm(request.POST, request.FILES)
@@ -29,6 +30,7 @@ def postCreate(request, type):
                     video.author = profile
                     video.postType = type
                     video.save()
+                    form.save_m2m()
                     return redirect("drafts",request.user.id)
             case "sketch":
                 form = SketchCreateForm(request.POST, request.FILES)
@@ -36,7 +38,9 @@ def postCreate(request, type):
                     sketch = form.save(commit=False)
                     sketch.author = profile
                     sketch.postType = "img"
+
                     sketch.save()
+                    form.save_m2m()
                     return redirect("drafts",request.user.id)
             case _ :
                 raise ValueError("Post type error")
@@ -54,7 +58,7 @@ def postCreate(request, type):
 def postEdit(request, type , post_id,user_id):
     profile = get_object_or_404(Profile, id=user_id)
     post = get_object_or_404(Post, id = post_id)
-    if request.user == profile or request.user.is_staff:
+    if request.user == profile.user or request.user.is_staff:
         if request.method == "POST":
             match type:
                 case "react":
@@ -71,13 +75,14 @@ def postEdit(request, type , post_id,user_id):
                 post.author = profile
                 post.postType = type
                 post.accepted = False
-
                 if request.user.is_staff:
                     post.accepted = True
                     post.save()
+                    form.save_m2m()
                     return redirect("moderatorList")
                 else:
                     post.save()
+                    form.save_m2m()
                     return redirect("drafts", request.user.id)
 
         else:
