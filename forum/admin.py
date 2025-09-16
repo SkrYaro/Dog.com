@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from chat.models import Message
+from forum.models import Forum
 
 # Register your models here.
 
-admin.site.register(Message)
+admin.site.register(Forum)

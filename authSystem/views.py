@@ -53,8 +53,6 @@ def logout_view(request):
 class Profiles:
     home = 'profile'
 
-
-
     def profile_view(request, user_id):
         profile = get_object_or_404(Profile,id = user_id)
         intoSub = len(list(Sub.objects.filter(fan = profile)))

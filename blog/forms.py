@@ -8,7 +8,7 @@ class ReactCreateForm(forms.ModelForm):
     name = forms.CharField(label="Придумайте назву реакції", max_length=100)
     description = forms.CharField(label="Придумайте опис до реакції", max_length=100)
     category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
-    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),label="Виберіть тег для пояснення мотивів поста")
     draft = forms.BooleanField(label="Залишити ,як чорняк", required=False)
 
     class Meta:
@@ -21,7 +21,7 @@ class SketchCreateForm(forms.ModelForm):
     description = forms.CharField(label="Придумайте опис до відео", max_length=100)
     img = forms.FileField(label="Загрузіть ваший витвір мистецтва")
     category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
-    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),label="Виберіть тег для пояснення мотивів поста")
     draft = forms.BooleanField(label="Залишити ,як чорняк", required=False)
     class Meta:
         model = Post
@@ -35,7 +35,7 @@ class VideoCreateForm(forms.ModelForm):
     video = forms.FileField(label="Загрузіть відео")
     cover = forms.FileField(label="Обкладинка до відео",required=False)
     category = forms.ModelChoiceField(queryset=Category.objects.all(),label="Для приваблювання підходячих юзерів, будь ласка виберіть категорію" ,required=False)
-    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),label="Виберіть тег для пояснення мотивів поста",required=False)
+    tags = forms.ModelMultipleChoiceField(queryset=Tag.objects.all(),label="Виберіть тег для пояснення мотивів поста")
     draft = forms.BooleanField(label="Залишити ,як чорняк", required=False)
 
     class Meta:

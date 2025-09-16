@@ -34,7 +34,7 @@
           <strong class="text-muted mb-1">Юзернейм:</strong>
                       <h3 class="card-title">{{ profile.name }}</h3>
 
-          {% if profile.isOpen %}
+          {% if profile.isOpen or request.user == profile.user or request.user.is_staff%}
             <p><b>Ім'я:</b> {{ profile.first_name }}</p>
             <p><b>Прізвище:</b> {{ profile.last_name }}</p>
             <p><b>Email:</b> {{ profile.email }}</p>
@@ -43,22 +43,28 @@
         </div>
       </div>
 
-      <!-- Пости користувача -->
       <div class="card shadow-sm">
-        <div class="card-header">
-          <h5 class="mb-0">Пости користувача</h5>
-        </div>
-        <div class="card-body">
-          {% for post in profile.posts.all %}
-            <div class="mb-2">
-              <a href="{% url 'post' post.id %}" class="fw-bold">{{ post.name }}</a>
-              <span class="text-muted"> — оновлено {{ post.time_upd }}</span>
-            </div>
-          {% empty %}
-            <p class="text-muted">Постів поки немає</p>
-          {% endfor %}
-        </div>
+  <div class="card-header d-flex justify-content-between align-items-center">
+    {% if profile.isOpen or request.user == profile.user or request.user.is_staff %}
+      <a href="{% url 'subs' profile.user.id %}"
+         class="btn btn-outline-primary btn-sm">
+        📋 Список підписок
+      </a>
+    {% endif %}
+    <h5 class="mb-0">Пости користувача</h5>
+  </div>
+  <div class="card-body">
+    {% for post in profile.posts.all %}
+      <div class="mb-2">
+        <a href="{% url 'post' post.id %}" class="fw-bold">{{ post.name }}</a>
+        <span class="text-muted"> — оновлено {{ post.time_upd }}</span>
       </div>
+    {% empty %}
+      <p class="text-muted">Постів поки немає</p>
+    {% endfor %}
+  </div>
+</div>
+
     </div>
 
   </div>
