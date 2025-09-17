@@ -40,5 +40,9 @@ urlpatterns = [
 
     path("post/comment/delete/post_id:<int:post_id>/comment<int:comment_id>",crud.commentDelete, name = 'comDel'),
 
-    path("subs/list/user:<int:user_id>/",views.subs,name = "subs")
+    path("subs/list/user:<int:user_id>/",views.subs,name = "subs"),
+
+    #drf
+    path("api/posts/", views.PostListAPI.as_view(), name="post-list-api")
+
 ]
