@@ -5,10 +5,12 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Avg
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import Resolver404
+from rest_framework.generics import ListCreateAPIView
 
 from authSystem.models import Profile
 from blog.forms import ComentCreateForm
 from blog.models import Post, Comment, Sub, Category, Tag, Rating
+from blog.serializers import PostSerializer
 
 
 # Create your views here.
@@ -180,3 +182,7 @@ def subs(request,user_id):
     outoSubs = Sub.objects.filter(author=profile)
 
     return render(request, template_name="subs/subs_detail.html", context={"intosubs":intoSubs, "outosubs":outoSubs,"profile":profile})
+
+class PostListAPI(ListCreateAPIView):
+    queryset= Post.objects.all()
+    serializer_class = PostSerializer
