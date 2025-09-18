@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY","ccx^j8$s*bb7xv@tf6@1=!@6y!b1r$k_h0v##l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =  os.environ.get('DEBUG',True)
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', "127.0.0.1").split(",")
+ALLOWED_HOSTS = ["127.0.0.1", "dog-com-1.onrender.com"]
 
 # Application definition
 
