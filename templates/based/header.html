@@ -24,10 +24,11 @@
         <li class="nav-item dropdown ">
                     <a class="nav-link dropdown-toggle active" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Зв'язок</a>
                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{%url 'forum'%}">Форум "ЧавоЩоРобити"</a></li>
                         {%if request.user.is_authenticated%}
 
                             <li><a class="dropdown-item" href="{%url 'reportList' request.user.id %}">Проблеми</a></li>
-                            <li><a class="dropdown-item" href="{%url 'forum'%}">Форум "ЧавоЩоРобити"</a></li>
+
 
 
                         {% if request.user.is_staff%}

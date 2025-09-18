@@ -27,6 +27,8 @@ def recomend():
 
     return recList
 
+
+
 def profilesList(request):
     profiles = Profile.objects.all()
     name = request.GET.get("name")
@@ -78,6 +80,7 @@ def posts_list(request, post_type = None):
             # вибрані для збереження стану
         }
     )
+@login_required()
 def draftList(request, user_id):
     profile = get_object_or_404(Profile , id = user_id)
     if profile.user == request.user:
@@ -86,6 +89,7 @@ def draftList(request, user_id):
     else:
         raise PermissionDenied()
 
+@login_required()
 def adminList(request):
     if request.user.is_staff:
         posts = Post.objects.all()
@@ -93,6 +97,7 @@ def adminList(request):
     else:
         raise Resolver404()
 
+@login_required()
 def adminAccept(request, post_id):
     post = get_object_or_404(Post, id = post_id)
 
@@ -104,7 +109,7 @@ def adminAccept(request, post_id):
     else:
         raise PermissionDenied()
 
-
+@login_required()
 def adminDelete(request,post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.user.is_staff:
@@ -114,7 +119,11 @@ def adminDelete(request,post_id):
         raise PermissionDenied()
 
 def postView(request, post_id):
-    profile = get_object_or_404(Profile,id = request.user.id)
+    try:
+        profile = get_object_or_404(Profile,id = request.user.id)
+    except:
+        pass
+
     post = get_object_or_404(Post,id = post_id)
     comments = Comment.objects.filter( post = post, answerOnYourself= None)
     form = ComentCreateForm()
@@ -131,6 +140,7 @@ def postView(request, post_id):
 
         return render(request, template_name="blog/post.html",context={"post":post,"form":form,"comments":comments,"recs":recs,"rating":rating})
 
+@login_required()
 def postSubs(request):
     profile = get_object_or_404(Profile , id = request.user.id)
     subs = list(Sub.objects.filter(fan = profile).values_list("author_id",flat=True))
@@ -182,7 +192,6 @@ def subs(request,user_id):
     outoSubs = Sub.objects.filter(author=profile)
 
     return render(request, template_name="subs/subs_detail.html", context={"intosubs":intoSubs, "outosubs":outoSubs,"profile":profile})
-
 class PostListAPI(ListCreateAPIView):
     queryset= Post.objects.all()
     serializer_class = PostSerializer

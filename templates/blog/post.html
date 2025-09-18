@@ -48,7 +48,7 @@
           </div>
         </div>
       </div>
-
+ {%if request.user.is_authenticated%}
       <!-- Горизонтальна оцінка кнопками -->
       <div class="mb-4">
         {% if rating %}
@@ -83,7 +83,7 @@
           </form>
         </div>
       </div>
-
+{%endif%}
       <!-- Список коментарів -->
       <h4 class="mb-3">Коментарі:</h4>
       {% for comment in comments %}
@@ -110,16 +110,18 @@
             </div>
           </div>
         </div>
+       <div class="collapse" id="comment{{ comment.id }}">
+                        {%if request.user.is_authenticated%}
 
         <!-- Блок відповідей -->
-        <div class="collapse" id="comment{{ comment.id }}">
+
           <div class="card card-body mb-2 bg-light">
             <form class="mb-2" action="{% url 'answerCommentAdd' post.id comment.id %}" method="POST">
               {% csrf_token %}
               {{ form|crispy }}
               <button type="submit" class="btn btn-sm btn-success mt-1">↩ Відповісти</button>
             </form>
-
+{%endif%}
             {% for answer in comment.answer.all %}
               <div class="border rounded p-2 mb-2 bg-white shadow-sm">
                 <b>{{ answer.author }}:</b> {{ answer.text }}

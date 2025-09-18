@@ -1,4 +1,5 @@
 from django.core.exceptions import PermissionDenied
+from django.http import Http404, HttpResponseServerError, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 from authSystem.models import Profile
@@ -68,7 +69,7 @@ def blank_delete(request,blank_id):
 def blank_accept(request,blank_id):
     blank = get_object_or_404(Forum, id = blank_id)
     if request.user.is_staff:
-        blank.confirmed = True
+        blank.confirmed = not blank.confirmed
         blank.save()
         return redirect("forumDraft")
     else:

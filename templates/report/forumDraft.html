@@ -76,6 +76,8 @@
 
         {% if request.user.is_staff %}
         <div class="post-actions mt-2 d-flex gap-2">
+                    <a href="{% url 'acceptBlank' blank.id %}" class="btn btn-danger btn-sm">️ ✏️ Зняти з підтвердження</a>
+
           <a href="{% url 'editBlank' blank.id %}" class="btn btn-warning btn-sm">✏️ Змінити</a>
           <a href="{% url 'deleteBlank' blank.id %}" class="btn btn-danger btn-sm">🗑 Видалити</a>
         </div>
