@@ -1,14 +1,26 @@
-# Використовуємо офіційний образ Python
-FROM python:3.12
-# Встановлюємо робочу директорію у контейнері
+# Використовуємо стабільну версію Python для Kivy
+FROM python:3.11-slim
+
+# Оновлюємо pip
+RUN pip install --upgrade pip
+
+# Створюємо робочу папку
 WORKDIR /app
-# Копіюємо файл залежностей у контейнер
+
+# Копіюємо лише requirements спочатку
 COPY requirements.txt .
+
 # Встановлюємо залежності
 RUN pip install --no-cache-dir -r requirements.txt
-# Копіюємо вміст проекту в контейнер
+
+# Копіюємо весь проєкт
 COPY . .
-# Відкриваємо порт, який використовується Django
+
+# Виставляємо змінну середовища
+ENV PYTHONUNBUFFERED=1
+
+# Опціонально: відкритий порт для Django/ASGI
 EXPOSE 8000
-# Запускаємо сервер Django
+
+# Команда за замовчуванням (можна змінити під свій проєкт)
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
