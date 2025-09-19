@@ -71,7 +71,7 @@
 
 
             {% if request.user.is_staff%}
-                <li><a class="dropdown-item" href="http://127.0.0.1:8000/admin">Адмінська панель</a></li>
+                <li><a class="dropdown-item" href="{%url 'admin'%}">Адмінська панель</a></li>
                 <li><a class="dropdown-item" href="{%url 'moderatorList'%}">Адмінська провірка</a></li>
                 <li><a class="dropdown-item" href="{%url 'adminChat'%}">Адмінський форум</a></li>
                               <li><hr class="dropdown-divider"></li>
