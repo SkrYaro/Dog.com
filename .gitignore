@@ -4,8 +4,6 @@ __pycache__/
 *$py.class
 .idea/
 
-media*
-media/.gitkeep
 # C extensions
 *.so
 __init__.py
