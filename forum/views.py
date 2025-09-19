@@ -1,5 +1,4 @@
 from django.core.exceptions import PermissionDenied
-from django.http import Http404, HttpResponseServerError, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 from authSystem.models import Profile

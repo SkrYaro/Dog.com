@@ -84,5 +84,5 @@ class Profiles:
                 form = CreateProfileForm(instance=profile)
             return render(request,'profiles/profile_edit.html',context={'form':form, "profile": profile})
         else:
-            PermissionDenied()
+            raise PermissionDenied()
 
