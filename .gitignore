@@ -208,7 +208,5 @@ marimo/_lsp/
 __marimo__/
 
 
-*/migrations/
-!*/migrations/__init__.py
 .vscode/
 
